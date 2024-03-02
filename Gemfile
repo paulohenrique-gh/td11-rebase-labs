@@ -3,6 +3,7 @@
 source "https://rubygems.org"
 
 gem 'puma'
+gem 'pg'
 gem 'rackup'
 gem 'sinatra'
 
