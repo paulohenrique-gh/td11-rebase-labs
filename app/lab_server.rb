@@ -12,15 +12,19 @@ end
 get '/tests' do
   content_type :json
 
-  conn = PG.connect(
-    dbname: 'postgres',
-    user: 'postgres',
-    password: 'password',
-    host: 'db',
-    port: 5432
-  )
+  db_name = if ENV['RACK_ENV'] == 'test'
+              'test'
+            else
+              'development'
+            end
 
-  conn.exec('SELECT * FROM exames').entries.to_json
+  conn = PG.connect(dbname: db_name, user: 'postgres',
+                    password: 'password', host: 'db', port: 5432)
+
+  exams = conn.exec('SELECT * FROM exames').entries.to_json
+  conn.close if conn
+
+  exams
 end
 
 if ENV['RACK_ENV'] == 'development' || ENV['RACK_ENV'] == 'production'

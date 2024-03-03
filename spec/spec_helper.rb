@@ -1,6 +1,7 @@
 require 'rspec'
 require 'rack/test'
 require 'sinatra'
+require 'pg'
 require_relative '../app/lab_server'
 
 ENV['RACK_ENV'] = 'test'
@@ -25,6 +26,20 @@ def app
 end
 
 RSpec.configure do |config|
+  config.before(:each) do
+    conn = PG.connect(
+      dbname: 'test',
+      user: 'postgres',
+      password: 'password',
+      host: 'db',
+      port: 5432
+    )
+
+    conn.exec('TRUNCATE exames;')
+
+    conn.close if conn
+  end
+
   config.include Rack::Test::Methods
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest

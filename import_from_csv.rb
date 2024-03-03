@@ -1,33 +1,19 @@
 require 'csv'
 require 'pg'
 
+db_name = if ENV['RACK_ENV'] == 'test'
+            'test'
+          else
+            'development'
+          end
+
 conn = PG.connect(
-  dbname: 'postgres',
+  dbname: db_name,
   user: 'postgres',
   password: 'password',
   host: 'db',
   port: 5432
 )
-
-conn.exec('CREATE TABLE IF NOT EXISTS exames (
-  id SERIAL,
-  cpf VARCHAR,
-  nome_paciente VARCHAR,
-  email_paciente VARCHAR,
-  data_nascimento_paciente DATE,
-  endereco_rua_paciente VARCHAR,
-  cidade_paciente VARCHAR,
-  estado_paciente VARCHAR,
-  crm_medico VARCHAR,
-  crm_medico_estado VARCHAR,
-  nome_medico VARCHAR,
-  email_medico VARCHAR,
-  token_resultado_exame VARCHAR,
-  data_exame DATE,
-  tipo_exame VARCHAR,
-  limites_tipo_exame VARCHAR,
-  resultado_tipo_exame VARCHAR
-);')
 
 rows = CSV.read('./data.csv', col_sep: ';')
 rows.shift

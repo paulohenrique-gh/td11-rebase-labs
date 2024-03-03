@@ -53,7 +53,7 @@ describe "GET '/tests'" do
        '89']]
     allow(CSV).to receive(:read).and_return(fake_data)
 
-    require_relative '../../import_from_csv'
+    load 'import_from_csv.rb'
     get '/tests'
 
     expect(last_response.status).to eq 200
