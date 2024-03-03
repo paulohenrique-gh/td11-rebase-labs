@@ -23,11 +23,11 @@ docker run \
   --rm \
   --name labs \
   -it \
+  -d \
   -v $(pwd):/app \
   -w /app \
   --network labs \
   -p 3000:3000 ruby:3.2.2 \
-  -d \
   sh -c "bundle install && ruby app/lab_server.rb -o 0.0.0.0"
 ```
 ## Rodar testes
