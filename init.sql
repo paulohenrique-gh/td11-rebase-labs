@@ -3,46 +3,76 @@ CREATE DATABASE test;
 
 \c development;
 
-CREATE TABLE IF NOT EXISTS exames (
-  id SERIAL,
-  cpf VARCHAR,
-  nome_paciente VARCHAR,
-  email_paciente VARCHAR,
-  data_nascimento_paciente DATE,
-  endereco_rua_paciente VARCHAR,
-  cidade_paciente VARCHAR,
-  estado_paciente VARCHAR,
-  crm_medico VARCHAR,
-  crm_medico_estado VARCHAR,
-  nome_medico VARCHAR,
-  email_medico VARCHAR,
-  token_resultado_exame VARCHAR,
-  data_exame DATE,
-  tipo_exame VARCHAR,
-  limites_tipo_exame VARCHAR,
-  resultado_tipo_exame VARCHAR
+CREATE TABLE IF NOT EXISTS patients (
+  patient_id SERIAL NOT NULL,
+  patient_cpf VARCHAR NOT NULL,
+  patient_name VARCHAR NOT NULL,
+  patient_email VARCHAR NOT NULL,
+  patient_birthdate DATE NOT NULL,
+  patient_address VARCHAR NOT NULL,
+  patient_city VARCHAR NOT NULL,
+  patient_state VARCHAR NOT NULL,
+  PRIMARY KEY (patient_id)
+);
+
+CREATE TABLE IF NOT EXISTS doctors (
+  doctor_id SERIAL NOT NULL,
+  doctor_crm VARCHAR NOT NULL,
+  doctor_crm_state VARCHAR NOT NULL,
+  doctor_name VARCHAR NOT NULL,
+  doctor_email VARCHAR NOT NULL,
+  PRIMARY KEY (doctor_id)
+);
+
+CREATE TABLE IF NOT EXISTS lab_tests (
+  test_id SERIAL NOT NULL,
+  patient_id INT NOT NULL,
+  doctor_id INT NOT NULL,
+  test_results_token VARCHAR NOT NULL,
+  test_date DATE NOT NULL,
+  test_type VARCHAR NOT NULL,
+  test_type_limits VARCHAR NOT NULL,
+  test_type_results VARCHAR,
+  PRIMARY KEY (test_id),
+  FOREIGN KEY (patient_id) REFERENCES patients (patient_id),
+  FOREIGN KEY (doctor_id) REFERENCES doctors (doctor_id)
 );
 
 \c test;
 
-CREATE TABLE IF NOT EXISTS exames (
-  id SERIAL,
-  cpf VARCHAR,
-  nome_paciente VARCHAR,
-  email_paciente VARCHAR,
-  data_nascimento_paciente DATE,
-  endereco_rua_paciente VARCHAR,
-  cidade_paciente VARCHAR,
-  estado_paciente VARCHAR,
-  crm_medico VARCHAR,
-  crm_medico_estado VARCHAR,
-  nome_medico VARCHAR,
-  email_medico VARCHAR,
-  token_resultado_exame VARCHAR,
-  data_exame DATE,
-  tipo_exame VARCHAR,
-  limites_tipo_exame VARCHAR,
-  resultado_tipo_exame VARCHAR
+CREATE TABLE IF NOT EXISTS patients (
+  patient_id SERIAL NOT NULL,
+  patient_cpf VARCHAR NOT NULL,
+  patient_name VARCHAR NOT NULL,
+  patient_email VARCHAR NOT NULL,
+  patient_birthdate DATE NOT NULL,
+  patient_address VARCHAR NOT NULL,
+  patient_city VARCHAR NOT NULL,
+  patient_state VARCHAR NOT NULL,
+  PRIMARY KEY (patient_id)
+);
+
+CREATE TABLE IF NOT EXISTS doctors (
+  doctor_id SERIAL NOT NULL,
+  doctor_crm VARCHAR NOT NULL,
+  doctor_crm_state VARCHAR NOT NULL,
+  doctor_name VARCHAR NOT NULL,
+  doctor_email VARCHAR NOT NULL,
+  PRIMARY KEY (doctor_id)
+);
+
+CREATE TABLE IF NOT EXISTS lab_tests (
+  test_id SERIAL NOT NULL,
+  patient_id INT NOT NULL,
+  doctor_id INT NOT NULL,
+  test_results_token VARCHAR NOT NULL,
+  test_date DATE NOT NULL,
+  test_type VARCHAR NOT NULL,
+  test_type_limits VARCHAR NOT NULL,
+  test_type_results VARCHAR,
+  PRIMARY KEY (test_id),
+  FOREIGN KEY (patient_id) REFERENCES patients (patient_id),
+  FOREIGN KEY (doctor_id) REFERENCES doctors (doctor_id)
 );
 
 \q
