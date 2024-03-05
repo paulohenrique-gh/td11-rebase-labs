@@ -17,6 +17,7 @@ RSpec.describe Doctor do
       doctor = Doctor.create(crm: 'B000BJ20J4', crm_state: 'PI',
                              name: 'Maria Luiza Pires', email: 'maria.pirez@wisozk.biz')
 
+      expect(Doctor.all.count).to eq 1
       expect(doctor.id).not_to be_nil
       expect(doctor.crm).to eq 'B000BJ20J4'
       expect(doctor.crm_state).to eq 'PI'
@@ -39,13 +40,20 @@ RSpec.describe Doctor do
   end
 
   context '.find_by' do
-    it 'returns the doctor according to given parameter' do
+    it 'returns an array with doctors according to given parameter' do
       Doctor.create(crm: 'B000BJ20J4', crm_state: 'PI',
                     name: 'Maria Luiza Pires', email: 'maria.pirez@wisozk.biz')
 
-      doctor = Doctor.find_by(crm: 'B000BJ20J4')
+      doctors = Doctor.find_by(crm: 'B000BJ20J4')
 
-      expect(doctor.name).to eq 'Maria Luiza Pires'
+      expect(doctors.class).to eq Array
+      expect(doctors[0].name).to eq 'Maria Luiza Pires'
+    end
+
+    it 'returns an empty array with there is no result' do
+      doctors = Doctor.find_by(crm: 'C009KIL1')
+
+      expect(doctors).to eq []
     end
   end
 end

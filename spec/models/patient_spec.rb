@@ -24,6 +24,7 @@ RSpec.describe Patient do
                                birthdate: '1999-03-19', address: '192 Rua Pedras',
                                city: 'Ituverava', state: 'Alagoas')
 
+      expect(Patient.all.count).to eq 1
       expect(patient.id).not_to be_nil
       expect(patient.cpf).to eq '048.445.170-88'
       expect(patient.name).to eq 'Renato Barbosa'
@@ -81,21 +82,22 @@ RSpec.describe Patient do
   end
 
   context '.find_by' do
-    it 'returns the patient according to given parameter' do
+    it 'returns an array with patients according to given parameter' do
       Patient.create(cpf: '048.445.170-88', name: 'Renato Barbosa',
                      email: 'renato.barbosa@ebert-quigley.com',
                      birthdate: '1999-03-19', address: '192 Rua Pedras',
                      city: 'Ituverava', state: 'Alagoas')
 
-      patient = Patient.find_by(cpf: '048.445.170-88')
+      patients = Patient.find_by(cpf: '048.445.170-88')
 
-      expect(patient.name).to eq 'Renato Barbosa'
+      expect(patients.class).to eq Array
+      expect(patients[0].name).to eq 'Renato Barbosa'
     end
 
-    it 'returns nil when there is no result' do
-      patient = Patient.find_by(cpf: '992.392.123-87')
+    it 'returns an empty array when there is no result' do
+      patients = Patient.find_by(cpf: '992.392.123-87')
 
-      expect(patient).to be_nil
+      expect(patients).to eq []
     end
   end
 end
