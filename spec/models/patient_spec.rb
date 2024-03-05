@@ -3,15 +3,10 @@ require 'patient'
 
 RSpec.describe Patient do
   it 'returns the correct attribute values' do
-    patient = Patient.new(
-      cpf: '048.445.170-88',
-      name: 'Renato Barbosa',
-      email: 'renato.barbosa@ebert-quigley.com',
-      birthdate: '1999-03-19',
-      address: '192 Rua Pedras',
-      city: 'Ituverava',
-      state: 'Alagoas'
-    )
+    patient = Patient.new(cpf: '048.445.170-88', name: 'Renato Barbosa',
+                          email: 'renato.barbosa@ebert-quigley.com',
+                          birthdate: '1999-03-19', address: '192 Rua Pedras',
+                          city: 'Ituverava', state: 'Alagoas')
 
     expect(patient.cpf).to eq '048.445.170-88'
     expect(patient.name).to eq 'Renato Barbosa'
@@ -24,12 +19,12 @@ RSpec.describe Patient do
 
   context '.create' do
     it 'saves patient in the database' do
-      Patient.create(cpf: '048.445.170-88', name: 'Renato Barbosa',
-                     email: 'renato.barbosa@ebert-quigley.com',
-                     birthdate: '1999-03-19', address: '192 Rua Pedras',
-                     city: 'Ituverava', state: 'Alagoas')
+      patient = Patient.create(cpf: '048.445.170-88', name: 'Renato Barbosa',
+                               email: 'renato.barbosa@ebert-quigley.com',
+                               birthdate: '1999-03-19', address: '192 Rua Pedras',
+                               city: 'Ituverava', state: 'Alagoas')
 
-      patient = Patient.all[0]
+      expect(patient.id).not_to be_nil
       expect(patient.cpf).to eq '048.445.170-88'
       expect(patient.name).to eq 'Renato Barbosa'
       expect(patient.email).to eq 'renato.barbosa@ebert-quigley.com'

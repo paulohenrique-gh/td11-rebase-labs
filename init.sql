@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS patients (
 
 CREATE TABLE IF NOT EXISTS doctors (
   doctor_id SERIAL NOT NULL,
-  doctor_crm VARCHAR NOT NULL,
+  doctor_crm VARCHAR NOT NULL UNIQUE,
   doctor_crm_state VARCHAR NOT NULL,
   doctor_name VARCHAR NOT NULL,
   doctor_email VARCHAR NOT NULL,

@@ -55,11 +55,11 @@ class Patient
   private
 
   def self.query_builder(options)
-    sql_query = ''
+    sql_query = 'SELECT * FROM patients WHERE '
     parameters = []
 
     options.each_with_index do |(k, v), index|
-      sql_query << "SELECT * FROM patients WHERE patient_#{k} = $#{index + 1}"
+      sql_query << "patient_#{k} = $#{index + 1}"
       sql_query << ' AND ' if options.size > index + 1
       parameters << v
     end
