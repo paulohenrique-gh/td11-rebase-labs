@@ -35,11 +35,7 @@ RSpec.configure do |config|
       port: 5432
     )
 
-    tables = conn.exec("SELECT table_name FROM information_schema.tables
-                        WHERE table_schema = 'public'
-                        AND table_type = 'BASE TABLE';").entries
-
-    tables.each { |table| conn.exec_params("TRUNCATE TABLE #{table['table_name']} CASCADE;") }
+    conn.exec('TRUNCATE TABLE lab_tests, doctors, patients CASCADE;')
 
     conn.close if conn
   end

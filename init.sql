@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS lab_tests (
 
 CREATE TABLE IF NOT EXISTS patients (
   patient_id SERIAL NOT NULL,
-  patient_cpf VARCHAR NOT NULL,
+  patient_cpf VARCHAR NOT NULL UNIQUE,
   patient_name VARCHAR NOT NULL,
   patient_email VARCHAR NOT NULL,
   patient_birthdate DATE NOT NULL,
