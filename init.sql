@@ -63,16 +63,16 @@ CREATE TABLE IF NOT EXISTS doctors (
 
 CREATE TABLE IF NOT EXISTS lab_tests (
   test_id SERIAL NOT NULL,
-  patient_id INT NOT NULL,
-  doctor_id INT NOT NULL,
+  test_patient_id INT NOT NULL,
+  test_doctor_id INT NOT NULL,
   test_results_token VARCHAR NOT NULL,
   test_date DATE NOT NULL,
   test_type VARCHAR NOT NULL,
   test_type_limits VARCHAR NOT NULL,
   test_type_results VARCHAR,
   PRIMARY KEY (test_id),
-  FOREIGN KEY (patient_id) REFERENCES patients (patient_id),
-  FOREIGN KEY (doctor_id) REFERENCES doctors (doctor_id)
+  FOREIGN KEY (test_patient_id) REFERENCES patients (patient_id),
+  FOREIGN KEY (test_doctor_id) REFERENCES doctors (doctor_id)
 );
 
 \q

@@ -18,7 +18,7 @@ RSpec.describe Patient do
   end
 
   context '.create' do
-    it 'saves patient in the database' do
+    it 'saves patient in the database and generates ID' do
       patient = Patient.create(cpf: '048.445.170-88', name: 'Renato Barbosa',
                                email: 'renato.barbosa@ebert-quigley.com',
                                birthdate: '1999-03-19', address: '192 Rua Pedras',

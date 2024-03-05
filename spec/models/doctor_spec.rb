@@ -13,7 +13,7 @@ RSpec.describe Doctor do
   end
 
   context '.create' do
-    it 'saves doctor in the database' do
+    it 'saves doctor in the database and generates ID' do
       doctor = Doctor.create(crm: 'B000BJ20J4', crm_state: 'PI',
                              name: 'Maria Luiza Pires', email: 'maria.pirez@wisozk.biz')
 
