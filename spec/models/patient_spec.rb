@@ -1,3 +1,4 @@
+require 'spec_helper'
 require 'patient'
 
 RSpec.describe Patient do
