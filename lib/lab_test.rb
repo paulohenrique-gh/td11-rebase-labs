@@ -38,6 +38,18 @@ class LabTest
     results = conn.exec_params(query[:sql_query], query[:parameters])
 
     return results.entries.map { |result| instantiate_from_db(result) } if results.any?
+    []
+  end
+
+  def self.all
+    conn = DatabaseConnection.connect
+    entries = conn.exec('SELECT * FROM lab_tests;').entries
+    conn.close if conn
+
+    entries.map do |entry|
+      data_hash = entry.transform_keys { |k| k.split('_')[1..-1].join('_').to_sym }
+      new(**data_hash)
+    end
   end
 
   private
