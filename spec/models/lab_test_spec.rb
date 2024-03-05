@@ -81,12 +81,12 @@ RSpec.describe LabTest do
     end
   end
 
-  context '.all' do
-    it 'returns all tests in the database' do
+  context '.all_as_json' do
+    it 'returns all tests in the database as json' do
       patient_one = Patient.create(cpf: '048.445.170-88', name: 'Renato Barbosa',
-                              email: 'renato.barbosa@ebert-quigley.com',
-                              birthdate: '1999-03-19', address: '192 Rua Pedras',
-                              city: 'Ituverava', state: 'Alagoas')
+                                   email: 'renato.barbosa@ebert-quigley.com',
+                                   birthdate: '1999-03-19', address: '192 Rua Pedras',
+                                   city: 'Ituverava', state: 'Alagoas')
       patient_two = Patient.create(cpf: '928.384.992.02', name: 'Antonio Jackson',
                                    email: 'antonio.jackson@ebert-quigley.com',
                                    birthdate: '1991-05-19', address: '112 Rua do Pecado',
@@ -103,19 +103,21 @@ RSpec.describe LabTest do
                                     date: '2022-10-30', type: 'Plaquetas',
                                     type_limits: '15-50', type_results: '40')
 
-      tests = LabTest.all
+      tests = LabTest.all_as_json
 
-      expect(tests.class).to eq Array
-      expect(tests.count).to eq 2
-      expect(tests[0].id).to eq lab_test_one.id
-      expect(tests[1].id).to eq lab_test_two.id
+      json_body = JSON.parse(tests)
+      expect(json_body.class).to eq Array
+      expect(json_body.count).to eq 2
+      expect(json_body[0]['id']).to eq lab_test_one.id
+      expect(json_body[1]['id']).to eq lab_test_two.id
     end
 
     it 'returns an empty array when there are no results' do
-      tests = LabTest.all
+      tests = LabTest.all_as_json
 
-      expect(tests.class).to eq Array
-      expect(tests.count).to eq 0
+      json_body = JSON.parse(tests)
+      expect(json_body.class).to eq Array
+      expect(json_body.count).to eq 0
     end
   end
 end

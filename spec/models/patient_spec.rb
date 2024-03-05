@@ -53,34 +53,6 @@ RSpec.describe Patient do
     end
   end
 
-  context '.all' do
-    it 'returns array with objects from database' do
-      Patient.create(cpf: '048.445.170-88', name: 'Renato Barbosa',
-                     email: 'renato.barbosa@ebert-quigley.com',
-                     birthdate: '1999-03-19', address: '192 Rua Pedras',
-                     city: 'Ituverava', state: 'Alagoas')
-      Patient.create(cpf: '528.101.449.01', name: 'Raul Geraldo',
-                     email: 'raul.geraldo@ebert-quigley.com',
-                     birthdate: '1989-03-20', address: '192 Rua Pedras',
-                     city: 'Ituverava', state: 'Alagoas')
-      Patient.create(cpf: '929.838.828-91', name: 'Taís Nogueira',
-                     email: 'tais.nogueira@ebert-quigley.com',
-                     birthdate: '2001-11-08', address: '82 Rua da Folha',
-                     city: 'Ituverava', state: 'Alagoas')
-
-      patients = Patient.all
-      expect(patients.class).to eq Array
-      expect(patients.count).to eq 3
-      expect(patients[0].cpf).to eq '048.445.170-88'
-      expect(patients[1].cpf).to eq '528.101.449.01'
-      expect(patients[2].cpf).to eq '929.838.828-91'
-    end
-
-    it 'returns an empty array when there is no patient in the database' do
-      expect(Patient.all).to eq []
-    end
-  end
-
   context '.find_by' do
     it 'returns an array with patients according to given parameter' do
       Patient.create(cpf: '048.445.170-88', name: 'Renato Barbosa',

@@ -1,4 +1,4 @@
-require 'database/database_connection'
+require_relative 'database/database_connection'
 
 class BaseModel
   def self.create(**attributes)
@@ -17,18 +17,6 @@ class BaseModel
     return nil
   ensure
     conn.close if conn
-  end
-
-  def self.all
-    conn = DatabaseConnection.connect
-    entries = conn.exec("SELECT * FROM #{table_name}").entries
-    conn.close
-
-    return entries if entries.empty?
-
-    entries.map do |entry|
-      instantiate_from_db(entry)
-    end
   end
 
   def self.find_by(options = {})

@@ -1,4 +1,4 @@
-require 'base_model'
+require_relative 'base_model'
 
 class Doctor < BaseModel
   attr_accessor :id, :crm, :crm_state, :name, :email

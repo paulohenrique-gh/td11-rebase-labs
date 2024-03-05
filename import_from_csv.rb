@@ -1,38 +1,25 @@
 require 'csv'
-require 'pg'
-
-db_name = if ENV['RACK_ENV'] == 'test'
-            'test'
-          else
-            'development'
-          end
-
-conn = PG.connect(
-  dbname: db_name,
-  user: 'postgres',
-  password: 'password',
-  host: 'db',
-  port: 5432
-)
+require_relative 'lib/patient'
+require_relative 'lib/doctor'
+require_relative 'lib/lab_test'
 
 rows = CSV.read('./data.csv', col_sep: ';')
 rows.shift
 
-sql_string = "
-  INSERT INTO exames (
-    cpf, nome_paciente, email_paciente, data_nascimento_paciente,
-    endereco_rua_paciente, cidade_paciente, estado_paciente, crm_medico,
-    crm_medico_estado, nome_medico, email_medico, token_resultado_exame,
-    data_exame, tipo_exame, limites_tipo_exame, resultado_tipo_exame
-  )
-  VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
-"
 puts 'Importando dados...'
 
 rows.each do |row|
-  conn.exec_params(sql_string, row)
-end
+  cpf, name, email, birthdate, address, city, state = row[0..6]
+  patient = Patient.find_by(cpf:)[0]
+  patient ||= Patient.create(cpf:, name:, email:, birthdate:, address:, city:, state:)
 
-conn.close if conn
+  crm, crm_state, name, email = row[7..10]
+  doctor = Doctor.find_by(crm:, crm_state:)[0]
+  doctor ||= Doctor.create(crm:, crm_state:, name:, email:)
+
+  results_token, date, type, type_limits, type_results = row[11..15]
+  LabTest.create(patient_id: patient.id, doctor_id: doctor.id,
+                 results_token:, date:, type:, type_limits:, type_results:)
+end
 
 puts 'Dados importados com sucesso'

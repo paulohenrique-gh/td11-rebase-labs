@@ -1,4 +1,4 @@
-require 'base_model'
+require_relative 'base_model'
 
 class Patient < BaseModel
   attr_accessor :id, :cpf, :name, :email, :birthdate, :address, :city, :state
