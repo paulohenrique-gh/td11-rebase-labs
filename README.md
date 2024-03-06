@@ -1,10 +1,12 @@
 # Rebase Labs
 
-## Criar network no Docker
+## Backend
+
+### Criar network no Docker
 ```shell
 docker network create labs
 ```
-## Iniciar banco de dados Postgres
+### Iniciar banco de dados Postgres
 ```shell
 docker run \
   --rm \
@@ -17,7 +19,7 @@ docker run \
   -p 5432:5432 \
   postgres
 ```
-## Iniciar servidor
+### Iniciar servidor
 ```shell
 docker run \
   --rm \
@@ -31,19 +33,19 @@ docker run \
   ruby:3.2.2 \
   sh -c "bundle install && ruby app/lab_server.rb -o 0.0.0.0"
 ```
-## Rodar testes
+### Rodar testes
 ```shell
 docker exec labs rspec
 ```
-## Importar dados do CSV para o banco de dados
+### Importar dados do CSV para o banco de dados
 ```shel
 docker exec labs sh -c "ruby import_from_csv.rb"
 ```
-## [Diagrama do banco de dados](https://dbdiagram.io/d/65e7c7eccd45b569fb9edec6)
+### [Diagrama do banco de dados](https://dbdiagram.io/d/65e7c7eccd45b569fb9edec6)
 
-# Endpoints
+## Endpoints
 
-## /tests
+### /tests
 
 Retorna uma lista com todos os exames cadastrados
 
@@ -91,3 +93,5 @@ Exemplo de resposta:
   }
 ]
 ```
+## Frontend
+
