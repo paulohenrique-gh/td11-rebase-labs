@@ -1,7 +1,8 @@
 require_relative 'base_model'
+require 'benchmark'
 
 class LabExam < BaseModel
-  attr_accessor :id, :patient_id, :doctor_id, :result_token, :result_date, :type, :type_limits, :type_results
+  attr_accessor :id, :patient_id, :doctor_id, :result_token, :result_date
 
   def initialize(id: nil, patient_id:, doctor_id:, result_token:, result_date:)
     @id = id
@@ -14,33 +15,68 @@ class LabExam < BaseModel
   def self.all_as_json
     conn = DatabaseConnection.connect
 
-    full_results = []
+    full_results = {}
 
-    exams = conn.exec("SELECT * FROM lab_exams;").entries.each do |exam|
-      exam_data = exam.slice('exam_result_token', 'exam_result_date')
+    conn.exec(sql_join_string).each do |row|
+      exam_token = row['exam_result_token']
 
-      patient_data = conn.exec_params("SELECT * FROM patients WHERE patient_id = $1;",
-                                       [exam['exam_patient_id']]).entries[0]
-      exam_data['patient'] = patient_data.except('patient_id')
+      full_results[exam_token] ||= {
+        exam_result_token: row['exam_result_token'],
+        exam_result_date: row['exam_result_date'],
+        patient: patient_data_from_query(row),
+        doctor: doctor_data_from_query(row),
+        tests: []
+      }
 
-      doctor_data = conn.exec_params("SELECT * FROM doctors WHERE doctor_id = $1;",
-                                     [exam['exam_doctor_id']]).entries[0]
-      exam_data['doctor'] = doctor_data.except('doctor_id')
-
-      tests_data = conn.exec_params("SELECT * FROM tests WHERE test_lab_exam_id = $1;",
-                                    [exam['exam_id']])
-                       .entries
-                       .map { |t| t.except('test_id', 'test_lab_exam_id') }
-      exam_data['tests'] = tests_data
-
-      full_results << exam_data
+      full_results[exam_token][:tests] << test_data_from_query(row)
     end
 
     conn.close if conn
-    full_results.to_json
+    full_results.values.to_json
   end
 
   private
+
+  def self.sql_join_string
+    "SELECT
+        exam_result_token, exam_result_date, patient_cpf, patient_name,
+        patient_email, patient_birthdate, patient_address, patient_city,
+        patient_state, doctor_crm, doctor_crm_state, doctor_name, doctor_email,
+        test_type, test_type_limits, test_type_results
+     FROM lab_exams
+     JOIN patients ON exam_patient_id = patient_id
+     JOIN doctors ON exam_doctor_id = doctor_id
+     JOIN tests ON exam_id = test_lab_exam_id;"
+  end
+
+  def self.patient_data_from_query(row)
+    {
+      patient_cpf: row['patient_cpf'],
+      patient_name: row['patient_name'],
+      patient_email: row['patient_email'],
+      patient_birthdate: row['patient_birthdate'],
+      patient_address: row['patient_address'],
+      patient_city: row['patient_city'],
+      patient_state: row['patient_state']
+    }
+  end
+
+  def self.doctor_data_from_query(row)
+    {
+      doctor_crm: row['doctor_crm'],
+      doctor_crm_state: row['doctor_crm_state'],
+      doctor_name: row['doctor_name'],
+      doctor_email: row['doctor_email']
+    }
+  end
+
+  def self.test_data_from_query(row)
+    {
+      test_type: row['test_type'],
+      test_type_limits: row['test_type_limits'],
+      test_type_results: row['test_type_results']
+    }
+  end
 
   def self.entity_name
     'exam'

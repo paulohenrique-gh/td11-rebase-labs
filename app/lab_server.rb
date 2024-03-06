@@ -13,7 +13,7 @@ end
 get '/tests' do
   content_type :json
 
-  LabTest.all_as_json
+  LabExam.all_as_json
 end
 
 if ENV['RACK_ENV'] == 'development' || ENV['RACK_ENV'] == 'production'
