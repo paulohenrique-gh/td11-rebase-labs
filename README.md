@@ -27,7 +27,8 @@ docker run \
   -v $(pwd):/app \
   -w /app \
   --network labs \
-  -p 3000:3000 ruby:3.2.2 \
+  -p 3000:3000 \
+  ruby:3.2.2 \
   sh -c "bundle install && ruby app/lab_server.rb -o 0.0.0.0"
 ```
 ## Rodar testes
@@ -38,6 +39,7 @@ docker exec labs rspec
 ```shel
 docker exec labs sh -c "ruby import_from_csv.rb"
 ```
+## [Diagrama do banco de dados](https://dbdiagram.io/d/65e7c7eccd45b569fb9edec6)
 
 # Endpoints
 
