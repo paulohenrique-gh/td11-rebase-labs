@@ -1,7 +1,7 @@
 require_relative 'database/database_connection'
 
 class BaseModel
-  def self.create(**attributes)
+  def self.create(attributes = {}, conn: nil, close_connection: true)
     sql_string = "
       INSERT INTO #{table_name}
       (#{model_attributes_to_db_attributes(attributes).keys.join(', ')})
@@ -9,14 +9,14 @@ class BaseModel
       RETURNING *;
     "
 
-    conn = DatabaseConnection.connect
+    conn ||= DatabaseConnection.connect
     result = conn.exec_params(sql_string, attributes.values)
 
     return instantiate_from_db(result.entries[0]) if result.any?
   rescue PG::UniqueViolation
     return nil
   ensure
-    conn.close if conn
+    conn.close if conn && close_connection
   end
 
   def self.all
@@ -31,12 +31,14 @@ class BaseModel
     end
   end
 
-  def self.find_by(options = {})
-    conn = DatabaseConnection.connect
+  def self.find_by(options = {}, conn: nil, close_connection: true)
+    conn ||= DatabaseConnection.connect
     query = select_query_builder(options)
     results = conn.exec_params(query[:sql_query], query[:parameters])
 
     return results.entries if results.entries.empty?
+
+    conn.close if conn && close_connection
 
     results.entries.map { |result| instantiate_from_db(result) }
   end
