@@ -1,7 +1,8 @@
 require 'spec_helper'
+require 'csv'
 
 describe "GET '/tests'" do
-  it 'returns list of exams' do
+  it 'returns list of exams after importing from CSV' do
     fake_data = [
       ['cpf', 'nome paciente', 'email paciente', 'data nascimento paciente',
        'endereço/rua paciente', 'cidade paciente', 'estado patiente',
@@ -59,5 +60,14 @@ describe "GET '/tests'" do
     expect(json_response.last[:tests].first[:test_type]).to eq 'leucócitos'
     expect(json_response.last[:tests].first[:test_type_limits]).to eq '9-61'
     expect(json_response.last[:tests].first[:test_type_results]).to eq '89'
+  end
+
+  it 'returns empty array before importing from CSV' do
+    get '/tests'
+
+    expect(last_response.status).to eq 200
+    json_response = JSON.parse(last_response.body)
+    expect(json_response.class).to eq Array
+    expect(json_response).to be_empty
   end
 end

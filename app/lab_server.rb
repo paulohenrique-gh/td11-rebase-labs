@@ -1,7 +1,5 @@
 require 'sinatra'
-require 'csv'
 require 'rack/handler/puma'
-require 'pg'
 require_relative '../lib/lab_exam'
 
 set :port, 3000
