@@ -1,56 +1,21 @@
 require 'spec_helper'
+require 'csv'
 
 describe "GET '/tests'" do
-  it 'returns list of exams' do
+  it 'returns list of exams after importing from CSV' do
     fake_data = [
-      ['cpf',
-       'nome paciente',
-       'email paciente',
-       'data nascimento paciente',
-       'endereço/rua paciente',
-       'cidade paciente',
-       'estado patiente',
-       'crm médico',
-       'crm médico estado',
-       'nome médico',
-       'email médico',
-       'token resultado exame',
-       'data exame',
-       'tipo exame',
-       'limites tipo exame',
-       'resultado tipo exame'],
-      ['048.445.170-88',
-       'Renato Barbosa',
-       'renato.barbosa@ebert-quigley.com',
-       '1999-03-19',
-       '192 Rua Pedras',
-       'Ituverava',
-       'Alagoas',
-       'B000BJ20J4',
-       'PI',
-       'Célia Ferreira',
-       'Célia@wisozk.biz',
-       'IQCZ17',
-       '2023-08-08',
-       'hemácias',
-       '45-52',
-       '97'],
-      ['048.973.170-88',
-       'Emilly Batista Neto',
-       'gerald.crona@ebert-quigley.com',
-       '2001-03-11',
-       '165 Rua Rafaela',
-       'Ituverava',
-       'Alagoas',
-       'B0009A20A5',
-       'PI',
-       'Maria Luiza Pires',
-       'denna@wisozk.biz',
-       'IQCZ99',
-       '2021-08-05',
-       'leucócitos',
-       '9-61',
-       '89']]
+      ['cpf', 'nome paciente', 'email paciente', 'data nascimento paciente',
+       'endereço/rua paciente', 'cidade paciente', 'estado patiente', 'crm médico',
+       'crm médico estado', 'nome médico', 'email médico', 'token resultado exame',
+       'data exame', 'tipo exame', 'limites tipo exame', 'resultado tipo exame'],
+      ['048.445.170-88', 'Renato Barbosa', 'renato.barbosa@ebert-quigley.com',
+       '1999-03-19', '192 Rua Pedras', 'Ituverava', 'Alagoas', 'B000BJ20J4', 'PI',
+       'Célia Ferreira', 'Célia@wisozk.biz', 'IQCZ17', '2023-08-08', 'hemácias',
+       '45-52', '97'],
+      ['048.973.170-88', 'Emilly Batista Neto', 'gerald.crona@ebert-quigley.com',
+       '2001-03-11', '165 Rua Rafaela', 'Ituverava', 'Alagoas', 'B0009A20A5', 'PI',
+       'Maria Luiza Pires', 'denna@wisozk.biz', 'IQCZ99', '2021-08-05', 'leucócitos',
+       '9-61', '89']]
     allow(CSV).to receive(:read).and_return(fake_data)
 
     load 'import_from_csv.rb'
@@ -93,5 +58,14 @@ describe "GET '/tests'" do
     expect(json_response.last['tipo_exame']).to eq 'leucócitos'
     expect(json_response.last['limites_tipo_exame']).to eq '9-61'
     expect(json_response.last['resultado_tipo_exame']).to eq '89'
+  end
+
+  it 'returns empty array before importing from CSV' do
+    get '/tests'
+
+    expect(last_response.status).to eq 200
+    json_response = JSON.parse(last_response.body)
+    expect(json_response.class).to eq Array
+    expect(json_response).to be_empty
   end
 end

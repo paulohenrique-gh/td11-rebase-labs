@@ -35,7 +35,7 @@ RSpec.configure do |config|
       port: 5432
     )
 
-    conn.exec('TRUNCATE exames;')
+    conn.exec('TRUNCATE lab_tests;')
 
     conn.close if conn
   end

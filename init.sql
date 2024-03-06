@@ -3,46 +3,48 @@ CREATE DATABASE test;
 
 \c development;
 
-CREATE TABLE IF NOT EXISTS exames (
+CREATE TABLE IF NOT EXISTS lab_tests (
   id SERIAL,
-  cpf VARCHAR,
-  nome_paciente VARCHAR,
-  email_paciente VARCHAR,
-  data_nascimento_paciente DATE,
-  endereco_rua_paciente VARCHAR,
-  cidade_paciente VARCHAR,
-  estado_paciente VARCHAR,
-  crm_medico VARCHAR,
-  crm_medico_estado VARCHAR,
-  nome_medico VARCHAR,
-  email_medico VARCHAR,
-  token_resultado_exame VARCHAR,
-  data_exame DATE,
-  tipo_exame VARCHAR,
-  limites_tipo_exame VARCHAR,
-  resultado_tipo_exame VARCHAR
+  patient_cpf VARCHAR,
+  patient_name VARCHAR,
+  patient_email VARCHAR,
+  patient_birthdate DATE,
+  patient_address VARCHAR,
+  patient_city VARCHAR,
+  patient_state VARCHAR,
+  doctor_crm VARCHAR,
+  doctor_crm_state VARCHAR,
+  doctor_name VARCHAR,
+  doctor_email VARCHAR,
+  test_results_token VARCHAR,
+  test_date DATE,
+  test_type VARCHAR,
+  test_type_limits VARCHAR,
+  test_type_results VARCHAR,
+  PRIMARY KEY (id)
 );
 
 \c test;
 
-CREATE TABLE IF NOT EXISTS exames (
+CREATE TABLE IF NOT EXISTS lab_tests (
   id SERIAL,
-  cpf VARCHAR,
-  nome_paciente VARCHAR,
-  email_paciente VARCHAR,
-  data_nascimento_paciente DATE,
-  endereco_rua_paciente VARCHAR,
-  cidade_paciente VARCHAR,
-  estado_paciente VARCHAR,
-  crm_medico VARCHAR,
-  crm_medico_estado VARCHAR,
-  nome_medico VARCHAR,
-  email_medico VARCHAR,
-  token_resultado_exame VARCHAR,
-  data_exame DATE,
-  tipo_exame VARCHAR,
-  limites_tipo_exame VARCHAR,
-  resultado_tipo_exame VARCHAR
+  patient_cpf VARCHAR,
+  patient_name VARCHAR,
+  patient_email VARCHAR,
+  patient_birthdate DATE,
+  patient_address VARCHAR,
+  patient_city VARCHAR,
+  patient_state VARCHAR,
+  doctor_crm VARCHAR,
+  doctor_crm_state VARCHAR,
+  doctor_name VARCHAR,
+  doctor_email VARCHAR,
+  test_results_token VARCHAR,
+  test_date DATE,
+  test_type VARCHAR,
+  test_type_limits VARCHAR,
+  test_type_results VARCHAR,
+  PRIMARY KEY (id)
 );
 
 \q
