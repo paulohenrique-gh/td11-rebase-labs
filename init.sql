@@ -25,18 +25,25 @@ CREATE TABLE IF NOT EXISTS doctors (
   UNIQUE (doctor_crm, doctor_crm_state)
 );
 
-CREATE TABLE IF NOT EXISTS lab_tests (
+CREATE TABLE IF NOT EXISTS lab_exams (
+  exam_id SERIAL NOT NULL,
+  exam_patient_id INT NOT NULL,
+  exam_doctor_id INT NULL,
+  exam_result_token VARCHAR NOT NULL UNIQUE,
+  exam_result_date VARCHAR,
+  PRIMARY KEY (exam_id),
+  FOREIGN KEY (exam_patient_id) REFERENCES patients (patient_id),
+  FOREIGN KEY (exam_doctor_id) REFERENCES doctors (doctor_id)
+);
+
+CREATE TABLE IF NOT EXISTS tests (
   test_id SERIAL NOT NULL,
-  test_patient_id INT NOT NULL,
-  test_doctor_id INT NOT NULL,
-  test_results_token VARCHAR NOT NULL,
-  test_date DATE NOT NULL,
+  test_lab_exam_id INT NOT NULL,
   test_type VARCHAR NOT NULL,
   test_type_limits VARCHAR NOT NULL,
   test_type_results VARCHAR,
   PRIMARY KEY (test_id),
-  FOREIGN KEY (test_patient_id) REFERENCES patients (patient_id),
-  FOREIGN KEY (test_doctor_id) REFERENCES doctors (doctor_id)
+  FOREIGN KEY (test_lab_exam_id) REFERENCES lab_exams (exam_id)
 );
 
 \c test;
@@ -63,18 +70,25 @@ CREATE TABLE IF NOT EXISTS doctors (
   UNIQUE (doctor_crm, doctor_crm_state)
 );
 
-CREATE TABLE IF NOT EXISTS lab_tests (
+CREATE TABLE IF NOT EXISTS lab_exams (
+  exam_id SERIAL NOT NULL,
+  exam_patient_id INT NOT NULL,
+  exam_doctor_id INT NULL,
+  exam_result_token VARCHAR NOT NULL UNIQUE,
+  exam_result_date VARCHAR,
+  PRIMARY KEY (exam_id),
+  FOREIGN KEY (exam_patient_id) REFERENCES patients (patient_id),
+  FOREIGN KEY (exam_doctor_id) REFERENCES doctors (doctor_id)
+);
+
+CREATE TABLE IF NOT EXISTS tests (
   test_id SERIAL NOT NULL,
-  test_patient_id INT NOT NULL,
-  test_doctor_id INT NOT NULL,
-  test_results_token VARCHAR NOT NULL,
-  test_date DATE NOT NULL,
+  test_lab_exam_id INT NOT NULL,
   test_type VARCHAR NOT NULL,
   test_type_limits VARCHAR NOT NULL,
   test_type_results VARCHAR,
   PRIMARY KEY (test_id),
-  FOREIGN KEY (test_patient_id) REFERENCES patients (patient_id),
-  FOREIGN KEY (test_doctor_id) REFERENCES doctors (doctor_id)
+  FOREIGN KEY (test_lab_exam_id) REFERENCES lab_exams (exam_id)
 );
 
 \q

@@ -35,7 +35,7 @@ RSpec.configure do |config|
       port: 5432
     )
 
-    conn.exec('TRUNCATE TABLE lab_tests, doctors, patients CASCADE;')
+    conn.exec('TRUNCATE TABLE patients, doctors, lab_exams, tests CASCADE;')
 
     conn.close if conn
   end

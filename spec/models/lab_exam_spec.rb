@@ -1,9 +1,10 @@
 require 'spec_helper'
-require 'lab_test'
+require 'lab_exam'
 require 'patient'
 require 'doctor'
+require 'test'
 
-RSpec.describe LabTest do
+RSpec.describe LabExam do
   it 'returns the correct attribute values' do
     patient = Patient.create(cpf: '048.445.170-88', name: 'Renato Barbosa',
                              email: 'renato.barbosa@ebert-quigley.com',
@@ -12,17 +13,13 @@ RSpec.describe LabTest do
     doctor = Doctor.create(crm: 'B000BJ20J4', crm_state: 'PI',
                            name: 'Maria Luiza Pires', email: 'maria.pirez@wisozk.biz')
 
-    lab_test = LabTest.new(patient_id: patient.id, doctor_id: doctor.id, results_token: 'IQCZ17',
-                           date: '2022-11-04', type: 'Leucócitos',
-                           type_limits: '52-81', type_results: '89')
+    lab_exam = LabExam.new(patient_id: patient.id, doctor_id: doctor.id,
+                           result_token: 'IQCZ17', result_date: '2022-11-04')
 
-    expect(lab_test.patient_id).to eq patient.id
-    expect(lab_test.doctor_id).to eq doctor.id
-    expect(lab_test.results_token).to eq 'IQCZ17'
-    expect(lab_test.date).to eq '2022-11-04'
-    expect(lab_test.type).to eq 'Leucócitos'
-    expect(lab_test.type_limits).to eq '52-81'
-    expect(lab_test.type_results).to eq '89'
+    expect(lab_exam.patient_id).to eq patient.id
+    expect(lab_exam.doctor_id).to eq doctor.id
+    expect(lab_exam.result_token).to eq 'IQCZ17'
+    expect(lab_exam.result_date).to eq '2022-11-04'
   end
 
   context '.create' do
@@ -34,19 +31,15 @@ RSpec.describe LabTest do
       doctor = Doctor.create(crm: 'B000BJ20J4', crm_state: 'PI',
                             name: 'Maria Luiza Pires', email: 'maria.pirez@wisozk.biz')
 
-      lab_test = LabTest.create(patient_id: patient.id, doctor_id: doctor.id, results_token: 'IQCZ17',
-                                date: '2022-11-04', type: 'Leucócitos',
-                                type_limits: '52-81', type_results: '89')
+      lab_exam = LabExam.create(patient_id: patient.id, doctor_id: doctor.id,
+                                result_token: 'IQCZ17', result_date: '2022-11-04')
 
 
-      expect(lab_test.id).not_to be_nil
-      expect(lab_test.patient_id).to eq patient.id
-      expect(lab_test.doctor_id).to eq doctor.id
-      expect(lab_test.results_token).to eq 'IQCZ17'
-      expect(lab_test.date).to eq '2022-11-04'
-      expect(lab_test.type).to eq 'Leucócitos'
-      expect(lab_test.type_limits).to eq '52-81'
-      expect(lab_test.type_results).to eq '89'
+      expect(lab_exam.id).not_to be_nil
+      expect(lab_exam.patient_id).to eq patient.id
+      expect(lab_exam.doctor_id).to eq doctor.id
+      expect(lab_exam.result_token).to eq 'IQCZ17'
+      expect(lab_exam.result_date).to eq '2022-11-04'
     end
   end
 
@@ -59,23 +52,21 @@ RSpec.describe LabTest do
       doctor = Doctor.create(crm: 'B000BJ20J4', crm_state: 'PI',
                              name: 'Maria Luiza Pires', email: 'maria.pirez@wisozk.biz')
 
-      lab_test_one = LabTest.create(patient_id: patient.id, doctor_id: doctor.id, results_token: 'IQCZ17',
-                                    date: '2022-11-04', type: 'Leucócitos',
-                                    type_limits: '52-81', type_results: '89')
-      lab_test_one = LabTest.create(patient_id: patient.id, doctor_id: doctor.id, results_token: 'MK9O9Z',
-                                    date: '2022-10-30', type: 'Plaquetas',
-                                    type_limits: '15-50', type_results: '40')
+      lab_exam_one = LabExam.create(patient_id: patient.id, doctor_id: doctor.id,
+                                    result_token: 'IQCZ17', result_date: '2022-11-04')
+      lab_exam_one = LabExam.create(patient_id: patient.id, doctor_id: doctor.id,
+                                    result_token: 'MK9O9Z', result_date: '2022-10-30')
 
-      tests = LabTest.find_by(patient_id: patient.id)
+      exams = LabExam.find_by(patient_id: patient.id)
 
-      expect(tests.class).to eq Array
-      expect(tests.count).to eq 2
-      expect(tests[0].date).to eq '2022-11-04'
-      expect(tests[1].date).to eq '2022-10-30'
+      expect(exams.class).to eq Array
+      expect(exams.count).to eq 2
+      expect(exams[0].result_date).to eq '2022-11-04'
+      expect(exams[1].result_date).to eq '2022-10-30'
     end
 
     it 'returns an empty array when there are no results' do
-      tests = LabTest.find_by(patient_id: 15)
+      tests = LabExam.find_by(patient_id: 15)
 
       expect(tests).to eq []
     end
@@ -96,24 +87,31 @@ RSpec.describe LabTest do
       doctor_two = Doctor.create(crm: 'P91IKM9114', crm_state: 'PI',
                                  name: 'Joao Carlos Azevedo', email: 'joao.azevedo@wisozk.biz')
 
-      lab_test_one = LabTest.create(patient_id: patient_one.id, doctor_id: doctor_two.id, results_token: 'IQCZ17',
-                                    date: '2022-11-04', type: 'Leucócitos',
-                                    type_limits: '52-81', type_results: '89')
-      lab_test_two = LabTest.create(patient_id: patient_two.id, doctor_id: doctor_one.id, results_token: 'MK9O9Z',
-                                    date: '2022-10-30', type: 'Plaquetas',
-                                    type_limits: '15-50', type_results: '40')
+      lab_exam_one = LabExam.create(patient_id: patient_one.id, doctor_id: doctor_two.id,
+                                    result_token: 'IQCZ17', result_date: '2022-11-04')
+      lab_exam_two = LabExam.create(patient_id: patient_two.id, doctor_id: doctor_one.id,
+                                    result_token: 'MK9O9Z', result_date: '2022-10-30')
 
-      tests = LabTest.all_as_json
+      test_one = Test.create(lab_exam_id: lab_exam_one.id, type: 'leucócitos',
+                             type_limits: '9-61', type_results: '75')
+      test_two = Test.create(lab_exam_id: lab_exam_one.id, type: 'hemácias',
+                             type_limits: '45-52', type_results: '48')
+      test_three = Test.create(lab_exam_id: lab_exam_two.id, type: 'plaquetas',
+                               type_limits: '11-93', type_results: '67')
+      test_four = Test.create(lab_exam_id: lab_exam_two.id, type: 'hdl',
+                              type_limits: '19-75', type_results: '3')
 
-      json_body = JSON.parse(tests)
+      exams = LabExam.all_as_json
+
+      json_body = JSON.parse(exams)
       expect(json_body.class).to eq Array
       expect(json_body.count).to eq 2
-      expect(json_body[0]['id']).to eq lab_test_one.id
-      expect(json_body[1]['id']).to eq lab_test_two.id
+      expect(json_body[0]['exam_result_token']).to eq 'IQCZ17'
+      expect(json_body[1]['exam_result_token']).to eq 'MK9O9Z'
     end
 
     it 'returns an empty array when there are no results' do
-      tests = LabTest.all_as_json
+      tests = LabExam.all_as_json
 
       json_body = JSON.parse(tests)
       expect(json_body.class).to eq Array

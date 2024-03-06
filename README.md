@@ -39,6 +39,7 @@ docker exec labs rspec
 ```shel
 docker exec labs sh -c "ruby import_from_csv.rb"
 ```
+## [Diagrama do banco de dados](https://dbdiagram.io/d/65e7c7eccd45b569fb9edec6)
 
 # Endpoints
 
