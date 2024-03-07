@@ -10,6 +10,7 @@ end
 
 get '/tests' do
   content_type :json
+  response.headers['Access-Control-Allow-Origin'] = '*'
 
   LabExam.all_as_json
 end
