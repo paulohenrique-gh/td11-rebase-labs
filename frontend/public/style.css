@@ -10,16 +10,21 @@ html {
   font-family: "Lato", sans-serif;
 }
 
-.title {
+header {
   font-size: 40px;
   background-color: #eee;
   padding: 16px;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 }
 
 .container {
   max-width: 800px;
   margin: 0 auto;
+}
+
+.page-title {
+  text-align: center;
+  margin-bottom: 16px;
 }
 
 .exam-list {
@@ -30,6 +35,49 @@ html {
 }
 
 .exam-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   border: 2px solid black;
   padding: 16px;
+}
+
+.general-data,
+.patient-data,
+.doctor-data,
+.test-data-list {
+  border: 2px solid black;
+}
+
+.general-data {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 8px;
+}
+
+.patient-data--header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column: 1 / -1;
+  background-color: #eee;
+  padding: 8px;
+}
+
+.patient-data--header .title {
+  text-transform: uppercase;
+}
+
+.patient-data--header .name {
+  text-transform: uppercase;
+  font-weight: bolder;
+}
+
+.patient-data--info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 8px;
+}
+
+.test-data-list {
+  list-style: none;
 }
