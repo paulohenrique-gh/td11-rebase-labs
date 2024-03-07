@@ -11,8 +11,8 @@ docker network create labs
 docker run \
   --rm \
   --name db \
-  -v $(pwd)/init.sql:/docker-entrypoint-initdb.d/init.sql \
-  -v $(pwd)/db/data:/var/lib/postgresql/data \
+  -v $(pwd)/backend/init.sql:/docker-entrypoint-initdb.d/init.sql \
+  -v $(pwd)/backend/db/data:/var/lib/postgresql/data \
   -e POSTGRES_PASSWORD=password \
   --network labs \
   -d \
@@ -26,11 +26,12 @@ docker run \
   --name labs \
   -it \
   -d \
-  -v $(pwd):/app \
+  -v ~/.bundle:/usr/local/bundle
+  -v $(pwd)/backend:/app \
   -w /app \
   --network labs \
   -p 3000:3000 \
-  ruby:3.2.2 \
+  ruby \
   sh -c "bundle install && ruby app/lab_server.rb -o 0.0.0.0"
 ```
 ### Rodar testes

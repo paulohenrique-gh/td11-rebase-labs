@@ -34,28 +34,34 @@ header {
   list-style: none;
 }
 
-.exam-info {
+.exam-section {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  border: 2px solid black;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
+  border: 1px solid #eee;
+  border-radius: 5px;
   padding: 16px;
+  margin-bottom: 16px;
 }
 
 .general-data,
 .patient-data,
 .doctor-data,
-.test-data-list {
-  border: 2px solid black;
+.test-data {
+  border: 1px solid #eee;
 }
 
 .general-data {
   display: grid;
   grid-template-columns: 1fr 1fr;
   padding: 8px;
+  margin-bottom: 8px;
 }
 
-.patient-data--header {
+.patient-data--header,
+.doctor-data--header,
+.test-data--header {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-column: 1 / -1;
@@ -63,21 +69,55 @@ header {
   padding: 8px;
 }
 
-.patient-data--header .title {
+.patient-data--header .title,
+.doctor-data--header .title,
+.test-data--header .title {
   text-transform: uppercase;
 }
 
-.patient-data--header .name {
+.patient-data--header .name,
+.doctor-data--header .name {
   text-transform: uppercase;
   font-weight: bolder;
 }
 
-.patient-data--info {
+.patient-data--info,
+.doctor-data--info {
   display: grid;
   grid-template-columns: 1fr 1fr;
   padding: 8px;
 }
 
-.test-data-list {
+.test-listing {
+  padding: 8px;
+}
+
+.test-listing--info {
   list-style: none;
+}
+
+.test-listing--headers {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-bottom: 1px solid black;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.test-listing--item {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-bottom: .5px solid #eee;
+  margin-bottom: 5px;
+}
+
+.test-listing--item:last-child {
+  border-bottom: none;
+}
+
+.test-listing--headers span:nth-child(2),
+.test-listing--headers span:nth-child(3), 
+.test-listing--item span:nth-child(2),
+.test-listing--item span:nth-child(3) {
+  justify-self: end;
 }

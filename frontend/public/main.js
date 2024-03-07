@@ -11,10 +11,10 @@ then((data) => {
 
       exam.tests.forEach((test) => {
         tests += `
-          <li class="test-list-item>
-            <div>Tipo: ${test.test_type}</div>
-            <div>Limites: ${test.test_type_limits}</div>
-            <div>Resultado: ${test.test_type_results}</div>
+          <li class="test-listing--item">
+            <span>${test.test_type}</span>
+            <span>${test.test_type_limits}</span>
+            <span>${test.test_type_results}</span>
           </li>
         `
       });
@@ -22,10 +22,10 @@ then((data) => {
       console.log(tests);
 
       li.innerHTML = `
-        <div class="exam-info">
+        <div class="exam-section">
           <div class="general-data">
-            <div>Token: ${exam.exam_result_token}</div>
-            <div>Data do resultado: ${exam.exam_result_date}</div>
+            <div><strong>Token:</strong> ${exam.exam_result_token}</div>
+            <div><strong>Data do resultado:</strong> ${exam.exam_result_date}</div>
           </div>
           <div class="patient-data">
             <div class="patient-data--header">
@@ -33,23 +33,41 @@ then((data) => {
               <div class="name">${exam.patient.patient_name}</div>
             </div>
             <div class="patient-data--info">
-              <div>CPF: ${exam.patient.patient_cpf}</div>
-              <div>E-mail: ${exam.patient.patient_email}</div>
-              <div>Data de nascimento: ${exam.patient.patient_birthdate}</div>
-              <div>Endereço: ${exam.patient.patient_address}</div>
-              <div>Cidade: ${exam.patient.patient_city}</div>
-              <div>Estado: ${exam.patient.patient_state}</div>
+              <div><strong>CPF:</strong> ${exam.patient.patient_cpf}</div>
+              <div><strong>E-mail:</strong> ${exam.patient.patient_email}</div>
+              <div><strong>Data de nascimento:</strong> ${exam.patient.patient_birthdate}</div>
+              <div><strong>Endereço:</strong> ${exam.patient.patient_address}</div>
+              <div><strong>Cidade:</strong> ${exam.patient.patient_city}</div>
+              <div><strong>Estado:</strong> ${exam.patient.patient_state}</div>
             </div>
           </div>
           <div class="doctor-data">
-            <div>CRM: ${exam.doctor.doctor_crm}</div>
-            <div>Estado CRM: ${exam.doctor.doctor_crm_state}</div>
-            <div>Nome: ${exam.doctor.doctor_name}</div>
-            <div>Email: ${exam.doctor.doctor_email}</div>
+            <div class="doctor-data--header">
+              <div class="title">Médico</div>
+              <div class="name">${exam.doctor.doctor_name}</div>
+            </div>
+            <div class="doctor-data--info">
+              <div><strong>CRM:</strong> ${exam.doctor.doctor_crm}</div>
+              <div><strong>Estado CRM:</strong> ${exam.doctor.doctor_crm_state}</div>
+              <div><strong>Email:</strong> ${exam.doctor.doctor_email}</div>
+            </div>
           </div>
-          <ul class="test-data-list">
-            ${tests}
-          </ul>
+
+          <div class="test-data">
+            <div class="test-data--header">
+              <div class="title">Testes</div>
+            </div>
+            <div class="test-listing">
+              <div class="test-listing--headers">
+                <span>Tipo</span>
+                <span>Limites</span>
+                <span>Resultado</span>
+              </div>
+              <ul class="test-listing--info">
+                ${tests}
+              </ul>
+            </div>
+          </div>
         </div>
       ` 
       ul.appendChild(li);
