@@ -26,7 +26,7 @@ docker run \
   --name labs \
   -it \
   -d \
-  -v ~/.bundle:/usr/local/bundle
+  -v ~/.bundle:/usr/local/bundle \
   -v $(pwd)/backend:/app \
   -w /app \
   --network labs \

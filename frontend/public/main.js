@@ -19,8 +19,6 @@ then((data) => {
         `
       });
 
-      console.log(tests);
-
       li.innerHTML = `
         <div class="exam-section">
           <div class="general-data">
@@ -72,4 +70,5 @@ then((data) => {
       ` 
       ul.appendChild(li);
     });
-  });
+  }).
+  catch(error => console.log(error));
