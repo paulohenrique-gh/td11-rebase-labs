@@ -1,49 +1,52 @@
 # Rebase Labs
 
-## Criar network no Docker
+## Backend
+
+### Criar network no Docker
 ```shell
 docker network create labs
 ```
-## Iniciar banco de dados Postgres
+### Iniciar banco de dados Postgres
 ```shell
 docker run \
   --rm \
   --name db \
-  -v $(pwd)/init.sql:/docker-entrypoint-initdb.d/init.sql \
-  -v $(pwd)/db/data:/var/lib/postgresql/data \
+  -v $(pwd)/backend/init.sql:/docker-entrypoint-initdb.d/init.sql \
+  -v $(pwd)/backend/db/data:/var/lib/postgresql/data \
   -e POSTGRES_PASSWORD=password \
   --network labs \
   -d \
   -p 5432:5432 \
   postgres
 ```
-## Iniciar servidor
+### Iniciar servidor
 ```shell
 docker run \
   --rm \
   --name labs \
   -it \
   -d \
-  -v $(pwd):/app \
+  -v ~/.bundle:/usr/local/bundle \
+  -v $(pwd)/backend:/app \
   -w /app \
   --network labs \
   -p 3000:3000 \
-  ruby:3.2.2 \
+  ruby \
   sh -c "bundle install && ruby app/lab_server.rb -o 0.0.0.0"
 ```
-## Rodar testes
+### Rodar testes
 ```shell
 docker exec labs rspec
 ```
-## Importar dados do CSV para o banco de dados
+### Importar dados do CSV para o banco de dados
 ```shel
 docker exec labs sh -c "ruby import_from_csv.rb"
 ```
-## [Diagrama do banco de dados](https://dbdiagram.io/d/65e7c7eccd45b569fb9edec6)
+### [Diagrama do banco de dados](https://dbdiagram.io/d/65e7c7eccd45b569fb9edec6)
 
-# Endpoints
+## Endpoints
 
-## /tests
+### /tests
 
 Retorna uma lista com todos os exames cadastrados
 
@@ -91,3 +94,5 @@ Exemplo de resposta:
   }
 ]
 ```
+## Frontend
+
