@@ -12,27 +12,20 @@ class LabExam < BaseModel
     @result_date = result_date
   end
 
-  def self.all_as_json
+  def self.exams_as_json(token = nil)
     conn = DatabaseConnection.connect
 
-    full_results = {}
-
-    conn.exec(sql_join_string).each do |row|
-      exam_token = row['exam_result_token']
-
-      full_results[exam_token] ||= {
-        exam_result_token: row['exam_result_token'],
-        exam_result_date: row['exam_result_date'],
-        patient: patient_data_from_query(row),
-        doctor: doctor_data_from_query(row),
-        tests: []
-      }
-
-      full_results[exam_token][:tests] << test_data_from_query(row)
-    end
-
+    results = if token
+                conn.exec_params(sql_join_string << 'WHERE exam_result_token = $1', [token]).entries
+              else
+                conn.exec(sql_join_string << ';').entries
+              end
     conn.close if conn
-    full_results.values.to_json
+
+    return results.to_json if results.empty?
+    return formatted_exams_hash(results)[token].to_json if token
+
+    formatted_exams_hash(results).values.to_json
   end
 
   private
@@ -46,36 +39,25 @@ class LabExam < BaseModel
      FROM lab_exams
      JOIN patients ON exam_patient_id = patient_id
      JOIN doctors ON exam_doctor_id = doctor_id
-     JOIN tests ON exam_id = test_lab_exam_id;"
+     JOIN tests ON exam_id = test_lab_exam_id "
   end
 
-  def self.patient_data_from_query(row)
-    {
-      patient_cpf: row['patient_cpf'],
-      patient_name: row['patient_name'],
-      patient_email: row['patient_email'],
-      patient_birthdate: row['patient_birthdate'],
-      patient_address: row['patient_address'],
-      patient_city: row['patient_city'],
-      patient_state: row['patient_state']
-    }
-  end
+  def self.formatted_exams_hash(query_results)
+    exams_hash = {}
 
-  def self.doctor_data_from_query(row)
-    {
-      doctor_crm: row['doctor_crm'],
-      doctor_crm_state: row['doctor_crm_state'],
-      doctor_name: row['doctor_name'],
-      doctor_email: row['doctor_email']
-    }
-  end
+    query_results.each do |row|
+      exams_hash[row['exam_result_token']] ||= {
+        exam_result_token: row['exam_result_token'],
+        exam_result_date: row['exam_result_date'],
+        patient: row.slice(*row.keys[2..8]),
+        doctor: row.slice(*row.keys[9..12]),
+        tests: []
+      }
 
-  def self.test_data_from_query(row)
-    {
-      test_type: row['test_type'],
-      test_type_limits: row['test_type_limits'],
-      test_type_results: row['test_type_results']
-    }
+      exams_hash[row['exam_result_token']][:tests] << row.slice(*row.keys[13..15])
+    end
+
+    exams_hash
   end
 
   def self.entity_name
