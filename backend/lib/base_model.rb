@@ -31,9 +31,9 @@ class BaseModel
     end
   end
 
-  def self.find_by(options = {}, conn: nil, close_connection: true)
+  def self.find_by(attributes = {}, conn: nil, close_connection: true)
     conn ||= DatabaseConnection.connect
-    query = select_query_builder(options)
+    query = select_query_builder(attributes)
     results = conn.exec_params(query[:sql_query], query[:parameters])
 
     return results.entries if results.entries.empty?

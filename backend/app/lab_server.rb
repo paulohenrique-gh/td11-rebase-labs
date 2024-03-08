@@ -15,6 +15,12 @@ get '/tests' do
   LabExam.all_as_json
 end
 
+get '/tests/:token' do
+  content_type :json
+
+  "{ token: #{params[:token]} }".to_json
+end
+
 if ENV['RACK_ENV'] == 'development' || ENV['RACK_ENV'] == 'production'
   Rack::Handler::Puma.run(
     Sinatra::Application,

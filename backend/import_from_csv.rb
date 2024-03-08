@@ -14,7 +14,7 @@ puts 'Importando dados...'
 connection = DatabaseConnection.connect
 
 time = Benchmark.measure do
-  connection.transaction do  |conn|
+  connection.transaction do |conn|
     rows.each_with_index do |row|
       close_connection = false
 
@@ -35,7 +35,7 @@ time = Benchmark.measure do
 
       type, type_limits, type_results = row[13..15]
       Test.create({ lab_exam_id: lab_exam.id, type:, type_limits:, type_results: },
-                    conn:, close_connection:)
+                  conn:, close_connection:)
     end
   end
 end

@@ -6,14 +6,14 @@ require 'test'
 
 RSpec.describe Test do
   it 'returns the correct attribute values' do
-    patient = Patient.create(cpf: '048.445.170-88', name: 'Renato Barbosa',
+    patient = Patient.create({ cpf: '048.445.170-88', name: 'Renato Barbosa',
                              email: 'renato.barbosa@ebert-quigley.com',
                              birthdate: '1999-03-19', address: '192 Rua Pedras',
-                             city: 'Ituverava', state: 'Alagoas')
-    doctor = Doctor.create(crm: 'B000BJ20J4', crm_state: 'PI',
-                           name: 'Maria Luiza Pires', email: 'maria.pirez@wisozk.biz')
-    lab_exam = LabExam.create(patient_id: patient.id, doctor_id: doctor.id,
-                              result_token: 'IQCZ17', result_date: '2022-11-04')
+                             city: 'Ituverava', state: 'Alagoas' })
+    doctor = Doctor.create({ crm: 'B000BJ20J4', crm_state: 'PI',
+                           name: 'Maria Luiza Pires', email: 'maria.pirez@wisozk.biz' })
+    lab_exam = LabExam.create({ patient_id: patient.id, doctor_id: doctor.id,
+                              result_token: 'IQCZ17', result_date: '2022-11-04' })
 
     test = Test.new(lab_exam_id: lab_exam.id, type: 'leucócitos',
                     type_limits: '9-61', type_results: '75')
@@ -26,20 +26,20 @@ RSpec.describe Test do
 
   context '.create' do
     it 'saves test in the database' do
-      patient = Patient.create(cpf: '048.445.170-88', name: 'Renato Barbosa',
+      patient = Patient.create({ cpf: '048.445.170-88', name: 'Renato Barbosa',
                               email: 'renato.barbosa@ebert-quigley.com',
                               birthdate: '1999-03-19', address: '192 Rua Pedras',
-                              city: 'Ituverava', state: 'Alagoas')
-      doctor = Doctor.create(crm: 'B000BJ20J4', crm_state: 'PI',
-                            name: 'Maria Luiza Pires', email: 'maria.pirez@wisozk.biz')
-      lab_exam = LabExam.create(patient_id: patient.id, doctor_id: doctor.id,
-                                result_token: 'IQCZ17', result_date: '2022-11-04')
+                              city: 'Ituverava', state: 'Alagoas' })
+      doctor = Doctor.create({ crm: 'B000BJ20J4', crm_state: 'PI',
+                             name: 'Maria Luiza Pires', email: 'maria.pirez@wisozk.biz' })
+      lab_exam = LabExam.create({ patient_id: patient.id, doctor_id: doctor.id,
+                                result_token: 'IQCZ17', result_date: '2022-11-04' })
 
-      test = Test.create(lab_exam_id: lab_exam.id, type: 'leucócitos',
-                        type_limits: '9-61', type_results: '75')
+      test = Test.create({ lab_exam_id: lab_exam.id, type: 'leucócitos',
+                         type_limits: '9-61', type_results: '75' })
 
       expect(test.id).not_to be_nil
-      expect(Test.find_by(lab_exam_id: lab_exam.id)[0].id).to eq test.id
+      expect(Test.find_by({ lab_exam_id: lab_exam.id })[0].id).to eq test.id
     end
   end
 end
