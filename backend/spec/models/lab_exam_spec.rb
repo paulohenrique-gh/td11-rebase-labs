@@ -72,7 +72,7 @@ RSpec.describe LabExam do
     end
   end
 
-  context '.all_as_json' do
+  context '.exams_as_json' do
     it 'returns all tests in the database as json' do
       patient_one = Patient.create({ cpf: '048.445.170-88', name: 'Renato Barbosa',
                                    email: 'renato.barbosa@ebert-quigley.com',
@@ -101,7 +101,7 @@ RSpec.describe LabExam do
       test_four = Test.create({ lab_exam_id: lab_exam_two.id, type: 'hdl',
                               type_limits: '19-75', type_results: '3' })
 
-      exams = LabExam.all_as_json
+      exams = LabExam.exams_as_json
 
       json_body = JSON.parse(exams)
       expect(json_body.class).to eq Array
@@ -111,7 +111,7 @@ RSpec.describe LabExam do
     end
 
     it 'returns an empty array when there are no results' do
-      tests = LabExam.all_as_json
+      tests = LabExam.exams_as_json
 
       json_body = JSON.parse(tests)
       expect(json_body.class).to eq Array

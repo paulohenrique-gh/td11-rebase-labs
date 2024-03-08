@@ -12,45 +12,55 @@ class LabExam < BaseModel
     @result_date = result_date
   end
 
-  def self.all_as_json
+  def self.exams_as_json(token = nil)
     conn = DatabaseConnection.connect
 
-    full_results = {}
+    results_collection = {}
 
-    conn.exec(sql_join_string).each do |row|
-      exam_token = row['exam_result_token']
+    results = if token
+                conn.exec_params(sql_join_string << 'WHERE exam_result_token = $1', [token]).entries
+              else
+                conn.exec(sql_join_string << ';').entries
+              end
+    conn.close if conn
 
-      full_results[exam_token] ||= {
+    return results_collection if results.empty?
+
+    results.each do |row|
+      current_token = row['exam_result_token']
+
+      results_collection[current_token] ||= {
         exam_result_token: row['exam_result_token'],
         exam_result_date: row['exam_result_date'],
-        patient: patient_data_from_query(row),
-        doctor: doctor_data_from_query(row),
+        patient: row.slice(*row.keys[2..8]),
+        doctor: row.slice(*row.keys[9..12]),
         tests: []
       }
 
-      full_results[exam_token][:tests] << test_data_from_query(row)
+      results_collection[current_token][:tests] << row.slice(*row.keys[13..15])
     end
 
-    conn.close if conn
-    full_results.values.to_json
+    return results_collection[token].to_json if token
+
+    results_collection.values.to_json
   end
 
-  def self.exam_by_token_as_json(result_token)
-    conn = DatabaseConnection.connect
+  # def self.exam_by_token(result_token)
+    # conn = DatabaseConnection.connect
 
-    results = conn.exec_params(sql_join_string << 'WHERE exam_result_token = $1', [result_token]).entries
+    # results = conn.exec_params(sql_join_string, [result_token]).entries
 
-    conn.close if conn
+    # conn.close if conn
 
-    exam_json = results.first.slice(*results.first.keys[0..1])
-    exam_json[:patient] = results.first.slice(*results.first.keys[2..8])
-    exam_json[:doctor] = results.first.slice(*results.first.keys[9..12])
-    exam_json[:tests] = results.map do |result|
-      result.slice('test_type', 'test_type_limits', 'test_type_results')
-    end
+    # exam_data = results.first.slice(*results.first.keys[0..1])
+    # exam_data[:patient] = results.first.slice(*results.first.keys[2..8])
+    # exam_data[:doctor] = results.first.slice(*results.first.keys[9..12])
+    # exam_data[:tests] = results.map do |result|
+      # result.slice('test_type', 'test_type_limits', 'test_type_results')
+    # end
 
-    exam_json.to_json
-  end
+    # exam_data
+  # end
 
   private
 
@@ -66,33 +76,9 @@ class LabExam < BaseModel
      JOIN tests ON exam_id = test_lab_exam_id "
   end
 
-  def self.patient_data_from_query(row)
-    {
-      patient_cpf: row['patient_cpf'],
-      patient_name: row['patient_name'],
-      patient_email: row['patient_email'],
-      patient_birthdate: row['patient_birthdate'],
-      patient_address: row['patient_address'],
-      patient_city: row['patient_city'],
-      patient_state: row['patient_state']
-    }
-  end
+  def self.format_exam_hash(query_results)
+    format_hash = {}
 
-  def self.doctor_data_from_query(row)
-    {
-      doctor_crm: row['doctor_crm'],
-      doctor_crm_state: row['doctor_crm_state'],
-      doctor_name: row['doctor_name'],
-      doctor_email: row['doctor_email']
-    }
-  end
-
-  def self.test_data_from_query(row)
-    {
-      test_type: row['test_type'],
-      test_type_limits: row['test_type_limits'],
-      test_type_results: row['test_type_results']
-    }
   end
 
   def self.entity_name

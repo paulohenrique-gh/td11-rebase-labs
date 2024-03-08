@@ -35,14 +35,12 @@ describe 'GET /tests/:token' do
 
     get '/tests/IQCZ17'
 
-    binding.irb
-
     expect(last_response.status).to eq 200
     expect(last_response.content_type).to include 'application/json'
     json_response = JSON.parse(last_response.body, symbolize_names: true)
     expect(json_response.class).to eq Hash
     expect(json_response[:exam_result_token]).to eq 'IQCZ17'
-    expect(json_response[:exam_result_date]).to eq '2022-11-94'
+    expect(json_response[:exam_result_date]).to eq '2022-11-04'
     expect(json_response[:patient][:patient_cpf]).to eq '048.445.170-88'
     expect(json_response[:patient][:patient_name]).to eq 'Renato Barbosa'
     expect(json_response[:patient][:patient_email]).to eq 'renato.barbosa@ebert-quigley.com'
