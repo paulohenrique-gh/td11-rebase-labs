@@ -35,6 +35,23 @@ class LabExam < BaseModel
     full_results.values.to_json
   end
 
+  def self.exam_by_token_as_json(result_token)
+    conn = DatabaseConnection.connect
+
+    results = conn.exec_params(sql_join_string << 'WHERE exam_result_token = $1', [result_token]).entries
+
+    conn.close if conn
+
+    exam_json = results.first.slice(*results.first.keys[0..1])
+    exam_json[:patient] = results.first.slice(*results.first.keys[2..8])
+    exam_json[:doctor] = results.first.slice(*results.first.keys[9..12])
+    exam_json[:tests] = results.map do |result|
+      result.slice('test_type', 'test_type_limits', 'test_type_results')
+    end
+
+    exam_json.to_json
+  end
+
   private
 
   def self.sql_join_string
@@ -46,7 +63,7 @@ class LabExam < BaseModel
      FROM lab_exams
      JOIN patients ON exam_patient_id = patient_id
      JOIN doctors ON exam_doctor_id = doctor_id
-     JOIN tests ON exam_id = test_lab_exam_id;"
+     JOIN tests ON exam_id = test_lab_exam_id "
   end
 
   def self.patient_data_from_query(row)

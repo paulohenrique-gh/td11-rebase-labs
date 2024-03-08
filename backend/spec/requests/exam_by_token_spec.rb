@@ -35,9 +35,30 @@ describe 'GET /tests/:token' do
 
     get '/tests/IQCZ17'
 
+    binding.irb
+
     expect(last_response.status).to eq 200
     expect(last_response.content_type).to include 'application/json'
     json_response = JSON.parse(last_response.body, symbolize_names: true)
-
+    expect(json_response.class).to eq Hash
+    expect(json_response[:exam_result_token]).to eq 'IQCZ17'
+    expect(json_response[:exam_result_date]).to eq '2022-11-94'
+    expect(json_response[:patient][:patient_cpf]).to eq '048.445.170-88'
+    expect(json_response[:patient][:patient_name]).to eq 'Renato Barbosa'
+    expect(json_response[:patient][:patient_email]).to eq 'renato.barbosa@ebert-quigley.com'
+    expect(json_response[:patient][:patient_birthdate]).to eq '1999-03-19'
+    expect(json_response[:patient][:patient_address]).to eq '192 Rua Pedras'
+    expect(json_response[:patient][:patient_city]).to eq 'Ituverava'
+    expect(json_response[:patient][:patient_state]).to eq 'Alagoas'
+    expect(json_response[:doctor][:doctor_crm]).to eq 'P91IKM9114'
+    expect(json_response[:doctor][:doctor_crm_state]).to eq 'PI'
+    expect(json_response[:doctor][:doctor_name]).to eq 'Joao Carlos Azevedo'
+    expect(json_response[:doctor][:doctor_email]).to eq 'joao.azevedo@wisozk.biz'
+    expect(json_response[:tests][0][:test_type]).to eq 'leucócitos'
+    expect(json_response[:tests][0][:test_type_limits]).to eq '9-61'
+    expect(json_response[:tests][0][:test_type_results]).to eq '75'
+    expect(json_response[:tests][1][:test_type]).to eq 'hemácias'
+    expect(json_response[:tests][1][:test_type_limits]).to eq '45-52'
+    expect(json_response[:tests][1][:test_type_results]).to eq '48'
   end
 end
