@@ -13,8 +13,8 @@ html {
 nav {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  background-color: #eee;
+  justify-content: space-around;
+  background-color: #ccc;
   padding: 16px;
   margin-bottom: 24px;
   height: 80px;
@@ -24,16 +24,52 @@ nav header {
   font-size: 40px;
 }
 
-nav form {
+.search-form {
   display: flex;
-  align-items: stretch;
+  align-items: center;
   gap: 5px;
-  width: 300px;
+  width: auto;
   height: 80%;
 }
 
-nav form input {
-  width: 80%;
+.search-form label {
+  font-size: 18px;
+  font-weight: 700;
+  margin-right: 5px;
+}
+
+.search-form input {
+  width: 300px;
+  padding: 5px;
+  font-family: inherit;
+  font-size: 18px;
+  border: none;
+  border-radius: 5px;
+  transition: all 0.2s;
+}
+
+.search-form input::placeholder {
+  color: #ddd;
+}
+
+.search-form button {
+  background-color: inherit;
+  border: none;
+  align-self: stretch;
+}
+
+.search-form button:hover {
+  cursor: pointer;
+}
+
+.search-icon {
+  width: 40px;
+  height: 40px;
+}
+
+.search-form *:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(238, 238, 238, 0.637);
 }
 
 .container {

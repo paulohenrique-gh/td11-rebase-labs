@@ -1,13 +1,13 @@
-//const url = 'http://localhost:3000/tests'
+const url = 'http://localhost:3000/tests'
+const examList = document.querySelector('.exam-list');
 
 fetch(url).
 then((response) => response.json()).
 then((data) => {
-    const ul = document.querySelector('ul');
 
     data.forEach((exam) => {
       const li = document.createElement('li');
-      let tests = ''
+      let tests = '';
 
       exam.tests.forEach((test) => {
         tests += `
@@ -68,7 +68,26 @@ then((data) => {
           </div>
         </div>
       ` 
-      ul.appendChild(li);
+      examList.appendChild(li);
     });
   }).
   catch(error => console.log(error));
+
+const searchForm = document.querySelector('.search-form');
+
+const p = document.createElement('p') //temp
+
+let currentContent = examList;
+let newContent = p;
+
+searchForm.onsubmit = function(event) {
+  event.preventDefault();
+
+
+  p.textContent = event.target[0].value; //temp
+  currentContent.replaceWith(newContent);
+
+  console.log(event.target[0].value); //temp
+};
+
+
