@@ -1,4 +1,4 @@
-const url = 'http://localhost:3000/tests'
+//const url = 'http://localhost:3000/tests'
 
 fetch(url).
 then((response) => response.json()).
