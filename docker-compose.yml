@@ -1,0 +1,32 @@
+services:
+  db:
+    image: postgres
+    container_name: db
+    volumes:
+      - ./backend/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./backend/db/data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "5432:5432"
+    command: postgres -c "log_statement=all"
+
+  backend:
+    image: ruby
+    container_name: labs-backend
+    volumes:
+      - ./backend:/app
+    working_dir: /app
+    ports:
+      - "3000:3000"
+    command: bash -c "bundle install && ruby app/lab_server.rb -o 0.0.0.0"
+  
+  frontend:
+    image: ruby
+    container_name: labs-frontend
+    volumes:
+      - ./frontend:/app
+    working_dir: /app
+    ports:
+      - "4000:4000"
+    command: bash -c "bundle install && ruby server.rb -o 0.0.0.0"
