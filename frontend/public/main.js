@@ -1,7 +1,15 @@
 const url = 'http://localhost:3000/tests'
 const examList = document.querySelector('.exam-list');
 
+const searchForm = document.querySelector('.search-form');
+const examDetails = document.createElement('div')
+
+let currentContent = examList;
+let newContent = examDetails;
+
 function loadExamList() {
+  console.log('carregado')
+
   fetch(url).
   then((response) => response.json()).
   then((data) => {
@@ -75,12 +83,7 @@ function loadExamList() {
     catch(error => console.log(error));
 }
 
-const searchForm = document.querySelector('.search-form');
-
-const examDetails = document.createElement('div')
-
-let currentContent = examList;
-let newContent = examDetails;
+window.onload = loadExamList();
 
 searchForm.onsubmit = function(event) {
   event.preventDefault();
@@ -156,12 +159,12 @@ searchForm.onsubmit = function(event) {
             </div>
           </div>
         </div>
-      ` 
+
+        <button class="back-button" onclick="loadExamList()"><ion-icon name="arrow-back-circle-outline" class="back-icon"></ion-icon></button>
+      `;
     });
 
-  // examDetails.textContent = event.target[0].value; //temp
+    // examDetails.textContent = event.target[0].value; //temp
   currentContent.replaceWith(newContent);
-
 };
-
 

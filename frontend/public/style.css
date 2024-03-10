@@ -67,6 +67,20 @@ nav header {
   height: 40px;
 }
 
+.back-button {
+  display: block;
+  color: black;
+  margin: 0 auto;
+  background-color: inherit;
+  border: none;
+  cursor: pointer;
+}
+
+.back-button .back-icon {
+  height: 40px;
+  width: 40px;
+}
+
 .search-form *:focus {
   outline: none;
   box-shadow: 0 0 0 3px rgba(238, 238, 238, 0.637);
