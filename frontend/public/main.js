@@ -1,20 +1,27 @@
 const url = 'http://localhost:3000/tests'
 const searchForm = document.querySelector('.search-form');
-
+let filter = document.querySelector('.filter-value');
 const examList = document.querySelector('.exam-list');
-const examDetails = document.createElement('div')
+const examDetails = document.createElement('div');
+examDetails.classList.add('exam-details-section');
+
+function backToHomePage() {
+  examDetails.replaceWith(examList);
+  filter.innerHTML = 'Todos';
+}
+
 
 function examHTML(exam) {
   let tests = '';
 
   exam.tests.forEach((test) => {
-      tests += `
-        <li class="test-listing--item">
-          <span>${test.test_type}</span>
-          <span>${test.test_type_limits}</span>
-          <span>${test.test_type_results}</span>
-        </li>
-      `
+    tests += `
+      <li class="test-listing--item">
+        <span>${test.test_type}</span>
+        <span>${test.test_type_limits}</span>
+        <span>${test.test_type_results}</span>
+      </li>
+    `
   });
 
   return `<div class="exam-section">
@@ -64,30 +71,35 @@ function examHTML(exam) {
               </div>
             </div>
           </div>`
-}
+};
 
 function loadExamList() {
   fetch(url).
   then((response) => response.json()).
-  then((data) => {
-  
-      data.forEach((exam) => {
-        const li = document.createElement('li');
-  
-        li.innerHTML = examHTML(exam);
-        examList.appendChild(li);
-      });
-    }).
-    catch(error => console.log(error));
-}
+  then((data) => {  
+    data.forEach((exam) => {
+      const li = document.createElement('li');
+
+      li.innerHTML = examHTML(exam);
+      examList.appendChild(li);
+    });
+  }).
+  catch(error => console.log(error));
+};
 
 window.onload = loadExamList();
 
 searchForm.onsubmit = function(event) {
   event.preventDefault();
 
-  let token = event.target[0].value;
-  let filter = document.querySelector('.filter-value');
+  const token = event.target[0].value;
+
+  const backButton = document.createElement('button');
+  backButton.classList.add('back-button');
+  backButton.innerHTML = `
+    <ion-icon name="arrow-back-circle-outline" class="back-icon"></ion-icon>
+  `
+  backButton.addEventListener('click', backToHomePage);
 
   if (!token) {
     filter.textContent = 'Todos';
@@ -99,40 +111,23 @@ searchForm.onsubmit = function(event) {
     .then(response => response.json())
     .then(exam => {
       if (exam.length === 0) {
-        return examDetails.innerHTML = `
-          <p>Não localizado exame com token <strong>${token}</strong></p>
+        filter.textContent = token;
+        examDetails.innerHTML = `
+          <p class="no-results-msg">Não localizado exame com token
+                                    <strong>"${token}"</strong>
+          </p>
         `
+        examDetails.appendChild(backButton);
       }
 
-      let tests = '';
-
-      exam.tests.forEach((test) => {
-        tests += `
-          <li class="test-listing--item">
-            <span>${test.test_type}</span>
-            <span>${test.test_type_limits}</span>
-            <span>${test.test_type_results}</span>
-          </li>
-        `
-      });
-
       examDetails.innerHTML = examHTML(exam);
-      examDetails.innerHTML += `
-        <button class="back-button">
-          <ion-icon name="arrow-back-circle-outline" class="back-icon"></ion-icon>
-        </button>
-      `
+      examDetails.appendChild(backButton);
 
       filter.innerHTML = `${token}`;
-
-      let backButton = document.querySelector('.back-button')
-      backButton.addEventListener('click', function() {
-        examDetails.replaceWith(examList);
-        filter.innerHTML = 'Todos'
-      });
     });
 
   examList.replaceWith(examDetails);
 };
 
+document.querySelector('.home-link').addEventListener('click', backToHomePage);
 
