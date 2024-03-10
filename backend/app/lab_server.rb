@@ -17,8 +17,9 @@ end
 
 get '/tests/:token' do
   content_type :json
+  response.headers['Access-Control-Allow-Origin'] = '*'
 
-  LabExam.exams_as_json(params[:token])
+  LabExam.exams_as_json(params[:token].upcase)
 end
 
 if ENV['RACK_ENV'] == 'development' || ENV['RACK_ENV'] == 'production'

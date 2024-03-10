@@ -43,10 +43,15 @@ Foram criadas 4 tabelas a partir dos dados brutos do CSV.
 
 ### Endpoints
 
+### `/tests`
+
+Retorna uma lista com todos os exames cadastrados
+
+Exemplo de requisição:
+
 ```bash
 GET /tests
 ```
-Retorna uma lista com todos os exames cadastrados
 
 Exemplo de resposta:
 
@@ -80,61 +85,6 @@ Exemplo de resposta:
         "test_type": "leucócitos",
         "test_type_limits": "9-61",
         "test_type_results": "89"
-      },
-      {
-        "test_type": "plaquetas",
-        "test_type_limits": "11-93",
-        "test_type_results": "97"
-      },
-      {
-        "test_type": "hdl",
-        "test_type_limits": "19-75",
-        "test_type_results": "0"
-      },
-      {
-        "test_type": "ldl",
-        "test_type_limits": "45-54",
-        "test_type_results": "80"
-      },
-      {
-        "test_type": "vldl",
-        "test_type_limits": "48-72",
-        "test_type_results": "82"
-      },
-      {
-        "test_type": "glicemia",
-        "test_type_limits": "25-83",
-        "test_type_results": "98"
-      },
-      {
-        "test_type": "tgo",
-        "test_type_limits": "50-84",
-        "test_type_results": "87"
-      },
-      {
-        "test_type": "tgp",
-        "test_type_limits": "38-63",
-        "test_type_results": "9"
-      },
-      {
-        "test_type": "eletrólitos",
-        "test_type_limits": "2-68",
-        "test_type_results": "85"
-      },
-      {
-        "test_type": "tsh",
-        "test_type_limits": "25-80",
-        "test_type_results": "65"
-      },
-      {
-        "test_type": "t4-livre",
-        "test_type_limits": "34-60",
-        "test_type_results": "94"
-      },
-      {
-        "test_type": "ácido úrico",
-        "test_type_limits": "15-61",
-        "test_type_results": "2"
       }
     ]
   },
@@ -176,62 +126,21 @@ Exemplo de resposta:
         "test_type": "hdl",
         "test_type_limits": "19-75",
         "test_type_results": "74"
-      },
-      {
-        "test_type": "ldl",
-        "test_type_limits": "45-54",
-        "test_type_results": "66"
-      },
-      {
-        "test_type": "vldl",
-        "test_type_limits": "48-72",
-        "test_type_results": "41"
-      },
-      {
-        "test_type": "glicemia",
-        "test_type_limits": "25-83",
-        "test_type_results": "6"
-      },
-      {
-        "test_type": "tgo",
-        "test_type_limits": "50-84",
-        "test_type_results": "32"
-      },
-      {
-        "test_type": "tgp",
-        "test_type_limits": "38-63",
-        "test_type_results": "16"
-      },
-      {
-        "test_type": "eletrólitos",
-        "test_type_limits": "2-68",
-        "test_type_results": "61"
-      },
-      {
-        "test_type": "tsh",
-        "test_type_limits": "25-80",
-        "test_type_results": "13"
-      },
-      {
-        "test_type": "t4-livre",
-        "test_type_limits": "34-60",
-        "test_type_results": "9"
-      },
-      {
-        "test_type": "ácido úrico",
-        "test_type_limits": "15-61",
-        "test_type_results": "78"
       }
     ]
   }
 ]
 ```
-
-```bash
-/tests/:token
-```
+### `/tests/:token`
 
 Retorna um objeto JSON de acordo com token passado
+
+Exemplo de requisição
+
+```bash
+GET /tests/TJUXC2
+```
+Exemplo de resposta
 
 ```json
 {
@@ -262,61 +171,6 @@ Retorna um objeto JSON de acordo com token passado
       "test_type": "leucócitos",
       "test_type_limits": "9-61",
       "test_type_results": "24"
-    },
-    {
-      "test_type": "plaquetas",
-      "test_type_limits": "11-93",
-      "test_type_results": "26"
-    },
-    {
-      "test_type": "hdl",
-      "test_type_limits": "19-75",
-      "test_type_results": "87"
-    },
-    {
-      "test_type": "ldl",
-      "test_type_limits": "45-54",
-      "test_type_results": "21"
-    },
-    {
-      "test_type": "vldl",
-      "test_type_limits": "48-72",
-      "test_type_results": "76"
-    },
-    {
-      "test_type": "glicemia",
-      "test_type_limits": "25-83",
-      "test_type_results": "86"
-    },
-    {
-      "test_type": "tgo",
-      "test_type_limits": "50-84",
-      "test_type_results": "2"
-    },
-    {
-      "test_type": "tgp",
-      "test_type_limits": "38-63",
-      "test_type_results": "84"
-    },
-    {
-      "test_type": "eletrólitos",
-      "test_type_limits": "2-68",
-      "test_type_results": "90"
-    },
-    {
-      "test_type": "tsh",
-      "test_type_limits": "25-80",
-      "test_type_results": "94"
-    },
-    {
-      "test_type": "t4-livre",
-      "test_type_limits": "34-60",
-      "test_type_results": "35"
-    },
-    {
-      "test_type": "ácido úrico",
-      "test_type_limits": "15-61",
-      "test_type_results": "94"
     }
   ]
 }

@@ -7,12 +7,29 @@
   <title>Rebase Labs</title>
 </head>
 <body>
-  <header>Rebase Labs</header>
+  <nav>
+    <a href="#" class="home-link">Rebase Labs</a>
+    <form class="search-form">
+      <input type="text" placeholder="Informe o token do exame">
+      <button type="submit">
+        <ion-icon name="search-circle-outline" class="search-icon"></ion-icon>
+      </button>
+    </form>
+  </nav>
   <div class="container">
-    <h1 class="page-title">Exames</h1>
+    <div class="listing-header">
+      <h2 class="page-title">Exames</h2>
+      <div class="filter-group">
+        <span class="filter">Filtro: </span> 
+        <span class="filter-value">Todos</span>
+      </div>
+    </div>
 
     <ul class="exam-list"></ul>
   </div>
+
   <script src="main.js"></script>
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>
 </html>
