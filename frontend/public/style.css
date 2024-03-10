@@ -94,18 +94,12 @@ nav h1 {
 
 .listing-header {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-evenly;
   margin-bottom: 16px;
 }
 
-.page-title {
-  text-align: center;
-}
-
-.filter {
-  background-color: #eee;
-  padding: 8px;
+.filter-value {
   font-weight: bolder;
 }
 
@@ -153,8 +147,7 @@ nav h1 {
 
 .patient-data--header .title,
 .doctor-data--header .title,
-.test-data--header .title,
-.filter {
+.test-data--header .title {
   text-transform: uppercase;
 }
 
