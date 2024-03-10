@@ -8,8 +8,6 @@ let currentContent = examList;
 let newContent = examDetails;
 
 function loadExamList() {
-  console.log('carregado')
-
   fetch(url).
   then((response) => response.json()).
   then((data) => {
@@ -88,14 +86,20 @@ window.onload = loadExamList();
 searchForm.onsubmit = function(event) {
   event.preventDefault();
 
-  fetch(url + `/${event.target[0].value}`)
+  let token = event.target[0].value;
+  let filter = document.querySelector('.filter');
+
+  if (!token) {
+    examDetails.replaceWith(examList);
+    return;
+  }
+
+  fetch(url + `/${token}`)
     .then(response => response.json())
     .then(exam => {
-      console.log(exam);
-
       if (exam.length === 0) {
         return examDetails.innerHTML = `
-          <p>Não localizado exame com token <strong>${event.target[0].value}</strong></p>
+          <p>Não localizado exame com token <strong>${token}</strong></p>
         `
       }
 
@@ -160,11 +164,18 @@ searchForm.onsubmit = function(event) {
           </div>
         </div>
 
-        <button class="back-button" onclick="loadExamList()"><ion-icon name="arrow-back-circle-outline" class="back-icon"></ion-icon></button>
+        <button class="back-button"><ion-icon name="arrow-back-circle-outline" class="back-icon"></ion-icon></button>
       `;
+      filter.innerHTML = `${token}`;
+
+      let backButton = document.querySelector('.back-button')
+      backButton.addEventListener('click', function() {
+        examDetails.replaceWith(examList);
+        filter.innerHTML = 'Todos'
+      });
     });
 
-    // examDetails.textContent = event.target[0].value; //temp
   currentContent.replaceWith(newContent);
 };
+
 
