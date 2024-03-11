@@ -161,7 +161,8 @@ searchForm.onsubmit = function(event) {
 
   if (!token) {
     filter.textContent = 'Todos';
-    examDetails.replaceWith(examList);
+    currentContent.replaceWith(examList);
+    currentContent = examList;
     return;
   }
 
