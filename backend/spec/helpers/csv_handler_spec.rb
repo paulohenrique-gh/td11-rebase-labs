@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'helpers/csv_handler'
 
 RSpec.describe 'import_from_csv script' do
   it 'imports data from csv do database as expected' do
@@ -17,9 +18,10 @@ RSpec.describe 'import_from_csv script' do
        'PI', 'Maria Luiza Pires', 'denna@wisozk.biz', 'IQCZ99', '2021-08-05',
        'leucócitos', '9-61', '89']
     ]
+
     allow(CSV).to receive(:read).and_return(fake_data)
 
-    load 'import_from_csv.rb'
+    CSVHandler.import('data.csv')
 
     expect(LabExam.all.count).to eq 2
     expect(Test.all.count).to eq 2
