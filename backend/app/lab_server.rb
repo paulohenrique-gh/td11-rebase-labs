@@ -2,7 +2,7 @@ require 'csv'
 require 'sinatra'
 require 'rack/handler/puma'
 require_relative '../lib/lab_exam'
-require_relative '../import_from_csv'
+require_relative '../lib/helpers/csv_handler'
 
 set :port, 3000
 
@@ -39,6 +39,7 @@ post '/import' do
   end
 
   CSVHandler.import(file)
+  { message: 'Data imported successfully.' }.to_json
 end
 
 if ENV['RACK_ENV'] == 'development' || ENV['RACK_ENV'] == 'production'

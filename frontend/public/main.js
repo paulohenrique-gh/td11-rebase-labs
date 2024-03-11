@@ -10,8 +10,6 @@ function backToHomePage() {
   filter.innerHTML = 'Todos';
 }
 
-// FILE UPLOAD
-
 const form = document.querySelector('.import-form');
 form.addEventListener('submit', handleSubmit);
 
@@ -33,7 +31,6 @@ function uploadCsv() {
 
   fetch(importUrl, fetchOptions);
 };
-// END FILE UPLOAD
 
 function examHTML(exam) {
   let tests = '';
