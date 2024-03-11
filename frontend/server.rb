@@ -8,3 +8,7 @@ get '/' do
 
   File.open('index.html')
 end
+
+get '/tests' do
+  Faraday.get('http://localhost:3000/tests')
+end

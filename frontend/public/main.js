@@ -1,34 +1,49 @@
 const url = 'http://localhost:3000/tests'
+
 const searchForm = document.querySelector('.search-form');
+
 let filter = document.querySelector('.filter-value');
+
 const examList = document.querySelector('.exam-list');
 const examDetails = document.createElement('div');
 examDetails.classList.add('exam-details-section');
 
+const importForm = document.createElement('form');
+
+let currentContent = examList;
+
 function backToHomePage() {
-  examDetails.replaceWith(examList);
+  currentContent.replaceWith(examList);
   filter.innerHTML = 'Todos';
+  currentContent = examList;
 }
 
-const form = document.querySelector('.import-form');
-form.addEventListener('submit', handleSubmit);
+function createBackButton() {
+  const backButton = document.createElement('button');
+  backButton.classList.add('back-button');
+  backButton.innerHTML = `
+    <ion-icon name="arrow-back-circle-outline" class="back-icon"></ion-icon>
+  `
+  backButton.addEventListener('click', backToHomePage);
+
+  return backButton;
+}
 
 function handleSubmit(event) {
   event.preventDefault();
-  console.log('arquivo recebido no javascript');
-
+  
   uploadCsv();
 };
 
 function uploadCsv() {
   const importUrl = 'http://localhost:3000/import';
-  const formData = new FormData(form);
-
+  const formData = new FormData(importForm);
+  
   const fetchOptions = {
     method: 'post',
     body: formData
   };
-
+  
   fetch(importUrl, fetchOptions);
 };
 
@@ -75,7 +90,6 @@ function examHTML(exam) {
                 <div><strong>Email:</strong> ${exam.doctor.doctor_email}</div>
               </div>
             </div>
-
             <div class="test-data">
               <div class="test-data--header">
                 <div class="title">Testes</div>
@@ -106,7 +120,37 @@ function loadExamList() {
     });
   }).
   catch(error => console.log(error));
+
+  currentContent = examList;
 };
+
+const importLink = document.querySelector('.import-link');
+importLink.addEventListener('click', (event) => {
+  event.preventDefault();
+  
+  currentContent.replaceWith(importFormSession);
+  currentContent = importFormSession;
+  document.querySelector('.filter-value').textContent = 'Nenhum';
+});
+
+importForm.setAttribute('class', 'import-form');
+importForm.setAttribute('method', 'post');
+importForm.setAttribute('enctype', 'multipart/form-data');
+importForm.innerHTML = `
+  <div class="import-form-group">
+    <label for="file">Selecione o CSV</label>
+    <input name="file" id="file" type="file" accept="text/csv, application/vnd.ms-excel">
+  </div>
+  <button type="submit">Enviar
+    <ion-icon name="cloud-upload-outline" class="upload-icon"></ion-icon>
+  </button>
+`
+importForm.addEventListener('submit', handleSubmit);
+
+const importFormSession = document.createElement('div');
+importFormSession.classList.add('import-form-session');
+importFormSession.appendChild(importForm);
+importFormSession.appendChild(createBackButton());
 
 window.onload = loadExamList();
 
@@ -114,13 +158,6 @@ searchForm.onsubmit = function(event) {
   event.preventDefault();
 
   const token = event.target[0].value;
-
-  const backButton = document.createElement('button');
-  backButton.classList.add('back-button');
-  backButton.innerHTML = `
-    <ion-icon name="arrow-back-circle-outline" class="back-icon"></ion-icon>
-  `
-  backButton.addEventListener('click', backToHomePage);
 
   if (!token) {
     filter.textContent = 'Todos';
@@ -138,16 +175,18 @@ searchForm.onsubmit = function(event) {
                                     <strong>"${token}"</strong>
           </p>
         `
-        examDetails.appendChild(backButton);
+        examDetails.appendChild(createBackButton());
+        return;
       }
 
       examDetails.innerHTML = examHTML(exam);
-      examDetails.appendChild(backButton);
+      examDetails.appendChild(createBackButton());
 
       filter.innerHTML = `${token}`;
     });
 
-  examList.replaceWith(examDetails);
+  currentContent.replaceWith(examDetails);
+  currentContent = examDetails;
 };
 
 document.querySelector('.home-link').addEventListener('click', backToHomePage);
