@@ -38,7 +38,6 @@ post '/import' do
     return { error: 'File type is not CSV.' }.to_json
   end
 
-  binding.irb
   CSVHandler.import(file)
 end
 

@@ -42,12 +42,9 @@ class CSVHandler
       end
     end
 
-    binding.irb
-
     connection.close if connection
 
     puts 'Dados importados com sucesso'
     puts "Tempo de execução: #{time.real}"
   end
 end
-
