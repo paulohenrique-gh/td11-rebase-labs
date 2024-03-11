@@ -10,6 +10,30 @@ function backToHomePage() {
   filter.innerHTML = 'Todos';
 }
 
+// FILE UPLOAD
+
+const form = document.querySelector('.import-form');
+form.addEventListener('submit', handleSubmit);
+
+function handleSubmit(event) {
+  event.preventDefault();
+  console.log('arquivo recebido no javascript');
+
+  uploadCsv();
+};
+
+function uploadCsv() {
+  const importUrl = 'http://localhost:3000/import';
+  const formData = new FormData(form);
+
+  const fetchOptions = {
+    method: 'post',
+    body: formData
+  };
+
+  fetch(importUrl, fetchOptions);
+};
+// END FILE UPLOAD
 
 function examHTML(exam) {
   let tests = '';
