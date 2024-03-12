@@ -25,4 +25,14 @@ describe "POST '/import'" do
     json_response = JSON.parse(last_response.body, symbolize_names: true)
     expect(json_response[:error]).to eq 'File type is not CSV.'
   end
+
+  it '500 if backend request is not successfull' do
+    fake_csv = 'spec/support/test.csv'
+    fake_response = double('Faraday::Response', status: 500, success?: false)
+    allow(Faraday).to receive(:get).and_return(fake_response)
+
+    post '/import', file: Rack::Test::UploadedFile.new(fake_csv, 'text/csv')
+
+    expect(last_response.status).to eq 500
+  end
 end

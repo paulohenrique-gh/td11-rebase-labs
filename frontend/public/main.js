@@ -1,4 +1,4 @@
-const url = 'http://localhost:3000/tests'
+const path = '/load-exams'
 
 const searchForm = document.querySelector('.search-form');
 
@@ -109,9 +109,20 @@ function examHTML(exam) {
 };
 
 function loadExamList() {
-  fetch(url).
+  fetch(path).
   then((response) => response.json()).
   then((data) => {  
+    if (data.length === 0) {
+      console.log('sem nada cadastrado')
+      const li = document.createElement('li');
+
+      li.innerHTML = 'Nenhum registro encontrado.';
+      li.classList.add('no-results-msg');
+      examList.appendChild(li);
+
+      return;
+    }
+
     data.forEach((exam) => {
       const li = document.createElement('li');
 
@@ -119,7 +130,17 @@ function loadExamList() {
       examList.appendChild(li);
     });
   }).
-  catch(error => console.log(error));
+  catch(error => {
+    console.log(error);
+
+    const li = document.createElement('li');
+
+      li.innerHTML = 'Não foi possível carregar as informações. Tente mais tarde.';
+      li.classList.add('no-results-msg');
+      examList.appendChild(li);
+
+      return;
+  });
 
   currentContent = examList;
 };
@@ -166,7 +187,7 @@ searchForm.onsubmit = function(event) {
     return;
   }
 
-  fetch(url + `/${token}`)
+  fetch(path + `/${token}`)
     .then(response => response.json())
     .then(exam => {
       if (exam.length === 0) {
@@ -184,6 +205,17 @@ searchForm.onsubmit = function(event) {
       examDetails.appendChild(createBackButton());
 
       filter.innerHTML = `${token}`;
+    }).
+    catch(error => {
+    console.log(error);
+
+    const p = document.createElement('p');
+
+      p.innerHTML = 'Não foi possível carregar as informações. Tente mais tarde.';
+      p.classList.add('no-results-msg');
+      examDetails.appendChild(p);
+
+      return;
     });
 
   currentContent.replaceWith(examDetails);
