@@ -6,7 +6,7 @@ require_relative '../lib/helpers/csv_handler'
 
 set :port, 3000
 
-ALLOWED_FILE_TYPES = ['text/csv', 'application/vnd.ms-excel']
+ALLOWED_FILE_TYPES = ['text/csv', 'application/vnd.ms-excel'].freeze
 
 get '/' do
   'Hello World'
