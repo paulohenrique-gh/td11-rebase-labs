@@ -1,6 +1,7 @@
 require 'rspec'
 require 'rack/test'
 require 'sinatra'
+require 'faraday'
 require_relative '../server'
 
 ENV['RACK_ENV'] = 'test'

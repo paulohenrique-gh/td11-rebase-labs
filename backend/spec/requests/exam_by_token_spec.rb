@@ -35,8 +35,6 @@ describe 'GET /tests/:token' do
 
     get '/tests/IQCZ17'
 
-    binding.irb
-
     expect(last_response.status).to eq 200
     expect(last_response.content_type).to include 'application/json'
     json_response = JSON.parse(last_response.body, symbolize_names: true)

@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'faraday'
 
 describe 'GET /load-tests' do
   it 'returns full list of exams from the backend' do
@@ -67,12 +66,10 @@ describe 'GET /load-tests' do
         ]
       }
     ].to_json
-
-    fake_response = double('Faraday::Response', body: fake_response_body)
-
+    fake_response = double('Faraday::Response', body: fake_response_body, success?: true)
     allow(Faraday).to receive(:get).and_return(fake_response)
 
-    get('/load-tests')
+    get '/load-exams'
 
     expect(last_response.status).to eq 200
     expect(last_response.content_type).to include 'application/json'
@@ -80,5 +77,26 @@ describe 'GET /load-tests' do
     expect(json_response.class).to eq Array
     expect(json_response.first[:exam_result_token]).to eq 'IQCZ17'
     expect(json_response.last[:exam_result_token]).to eq '0W9I67'
+  end
+
+  it 'returns an empty array when there are no exams' do
+    fake_response_body = []
+    fake_response = double('Faraday::Response', body: fake_response_body, success?: true)
+    allow(Faraday).to receive(:get).and_return(fake_response)
+
+    get '/load-exams'
+
+    expect(last_response.status).to eq 200
+    expect(last_response.content_type).to include 'application/json'
+    expect(last_response.body).to be_empty
+  end
+
+  it 'responds with error' do
+    fake_response = double('Faraday::Response', status: 500, body: '[]', success?: false)
+    allow(Faraday).to receive(:get).and_return(fake_response)
+
+    get '/load-exams'
+
+    expect(last_response.status).to eq 500
   end
 end
