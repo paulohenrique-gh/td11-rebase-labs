@@ -31,8 +31,6 @@ post '/import' do
   content_type :json
   response.headers['Access-Control-Allow-Origin'] = '*'
 
-  puts "FILE BACKEND: #{params[:file]}"
-
   unless params[:file]
     response.status = 400
     return { error: 'The request does not contain any file.'}.to_json
