@@ -44,13 +44,43 @@ function handleSubmit(event) {
 function uploadCsv() {
   const importPath = '/import';
   const formData = new FormData(importForm);
-  
+
   const fetchOptions = {
     method: 'post',
     body: formData
   };
   
-  fetch(importPath, fetchOptions);
+  let message = document.querySelector('.message');
+
+  flashMsg.classList.remove('hidden');
+  message.textContent = 'Enviando arquivo...';
+
+  fetch(importPath, fetchOptions).
+  then((response) => {
+
+    if (response.status === 422) {
+      flashMsg.classList.remove('hidden');
+      message.textContent = 'Formato não compatível. Selecione um arquivo CSV.';
+      return;
+    }
+
+    if (!response.ok) {
+      flashMsg.classList.remove('hidden');
+      message.textContent = 'Ocorreu um erro ao processar requisição. Tente mais tarde.';
+      return;
+    }
+
+    flashMsg.classList.remove('hidden');
+    message.innerHTML = "Arquivo em processamento.<br />Caso sejam válidos, os dados estarão disponíveis em breve.";
+
+    currentContent.replaceWith(examList);
+    currentContent = examList;
+
+  }).
+  then((data) => {
+    console.log(data);
+  });
+
 };
 
 function examHTML(exam) {
@@ -166,7 +196,7 @@ importForm.setAttribute('enctype', 'multipart/form-data');
 importForm.innerHTML = `
   <div class="import-form-group">
     <label for="file">Selecione o CSV</label>
-    <input name="file" id="file" type="file" accept="text/csv, application/vnd.ms-excel">
+    <input name="file" id="file" type="file" accept="text/csv, application/vnd.ms-excel" required>
   </div>
   <button type="submit">Enviar
     <ion-icon name="cloud-upload-outline" class="upload-icon"></ion-icon>
