@@ -1,5 +1,11 @@
 const path = '/load-exams'
 
+const flashMsg = document.querySelector('.flash-msg');
+const closeMsgButton = document.querySelector('.close-btn');
+closeMsgButton.addEventListener('click', () => {
+  flashMsg.classList.add('hidden');
+});
+
 const searchForm = document.querySelector('.search-form');
 
 let filter = document.querySelector('.filter-value');

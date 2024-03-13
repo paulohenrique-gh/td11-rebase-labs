@@ -102,6 +102,32 @@ nav {
   margin: 0 auto;
 }
 
+.flash-msg {
+  background-color: #333;
+  color: white;
+  display: inline-block;
+  padding: 8px 16px;
+  position: fixed;
+  bottom: 10%;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.flash-msg.hidden {
+  opacity: 0;
+}
+
+.close-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 8px;
+  background-color: transparent;
+  color: white;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
 .listing-header {
   display: flex;
   align-items: baseline;
