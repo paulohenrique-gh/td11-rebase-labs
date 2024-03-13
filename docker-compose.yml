@@ -11,22 +11,38 @@ services:
       - "5432:5432"
     command: postgres -c "log_statement=all"
 
-  backend:
+  backend: &backend
     image: ruby
     container_name: labs-backend
     volumes:
       - ./backend:/app
+      - rubygems:/usr/local/bundle
     working_dir: /app
+    environment:
+      - REDIS_URL=redis://redis:6379/0
     ports:
       - "3000:3000"
     command: bash -c "bundle install && ruby app/lab_server.rb -o 0.0.0.0"
   
+  sidekiq:
+    <<: *backend
+    container_name: jobs
+    ports: []
+    command: bash -c "bundle install && sidekiq -r ./lib/jobs/import_csv_job.rb"
+
   frontend:
     image: ruby
     container_name: labs-frontend
     volumes:
       - ./frontend:/app
+      - rubygems:/usr/local/bundle
     working_dir: /app
     ports:
       - "4000:4000"
     command: bash -c "bundle install && ruby server.rb -o 0.0.0.0"
+
+  redis:
+    image: redis
+
+volumes:
+  rubygems:
