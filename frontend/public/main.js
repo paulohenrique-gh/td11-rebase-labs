@@ -1,5 +1,11 @@
 const path = '/load-exams'
 
+const flashMsg = document.querySelector('.flash-msg');
+const closeMsgButton = document.querySelector('.close-btn');
+closeMsgButton.addEventListener('click', () => {
+  flashMsg.classList.add('hidden');
+});
+
 const searchForm = document.querySelector('.search-form');
 
 let filter = document.querySelector('.filter-value');
@@ -36,15 +42,47 @@ function handleSubmit(event) {
 };
 
 function uploadCsv() {
-  const importUrl = 'http://localhost:3000/import';
+  const importPath = '/import';
   const formData = new FormData(importForm);
-  
+
   const fetchOptions = {
     method: 'post',
     body: formData
   };
   
-  fetch(importUrl, fetchOptions);
+  let message = document.querySelector('.message');
+
+  flashMsg.classList.remove('hidden');
+  message.textContent = 'Enviando arquivo...';
+
+  fetch(importPath, fetchOptions).
+  then((response) => {
+
+    if (response.status === 422) {
+      flashMsg.classList.remove('hidden');
+      message.textContent = 'Formato não compatível. Selecione um arquivo CSV.';
+      importForm.reset();
+      return;
+    }
+
+    if (!response.ok) {
+      flashMsg.classList.remove('hidden');
+      message.textContent = 'Ocorreu um erro ao processar requisição. Tente mais tarde.';
+      importForm.reset();
+      return;
+    }
+
+    flashMsg.classList.remove('hidden');
+    message.innerHTML = "Arquivo em processamento.<br />Caso sejam válidos, os dados estarão disponíveis em breve.";
+
+    currentContent.replaceWith(examList);
+    currentContent = examList;
+    importForm.reset();
+  }).
+  then((data) => {
+    console.log(data);
+  });
+
 };
 
 function examHTML(exam) {
@@ -160,7 +198,7 @@ importForm.setAttribute('enctype', 'multipart/form-data');
 importForm.innerHTML = `
   <div class="import-form-group">
     <label for="file">Selecione o CSV</label>
-    <input name="file" id="file" type="file" accept="text/csv, application/vnd.ms-excel">
+    <input name="file" id="file" type="file" accept="text/csv, application/vnd.ms-excel" required>
   </div>
   <button type="submit">Enviar
     <ion-icon name="cloud-upload-outline" class="upload-icon"></ion-icon>

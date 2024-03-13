@@ -3,6 +3,7 @@ require 'sinatra'
 require 'rack/handler/puma'
 require_relative '../lib/lab_exam'
 require_relative '../lib/helpers/csv_handler'
+require_relative '../lib/jobs/import_csv_job'
 
 set :port, 3000
 
@@ -30,6 +31,11 @@ post '/import' do
   content_type :json
   response.headers['Access-Control-Allow-Origin'] = '*'
 
+  unless params[:file]
+    response.status = 400
+    return { error: 'The request does not contain any file.'}.to_json
+  end
+
   file = params[:file][:tempfile]
   filetype = params[:file][:type]
 
@@ -38,8 +44,10 @@ post '/import' do
     return { error: 'File type is not CSV.' }.to_json
   end
 
-  CSVHandler.import(file)
-  { message: 'Data imported successfully.' }.to_json
+  rows = CSV.read(file, col_sep: ';')
+
+  ImportCsvJob.perform_async(rows)
+  { message: 'Processing file.' }.to_json
 end
 
 if ENV['RACK_ENV'] == 'development' || ENV['RACK_ENV'] == 'production'

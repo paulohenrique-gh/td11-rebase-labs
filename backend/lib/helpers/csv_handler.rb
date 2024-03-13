@@ -7,11 +7,10 @@ require_relative '../test'
 require_relative '../database/database_connection'
 
 class CSVHandler
-  def self.import(file)
-    rows = CSV.read(file, col_sep: ';')
-    rows.shift
-
+  def self.import(rows)
     puts 'Importando dados...'
+
+    rows.shift
 
     connection = DatabaseConnection.connect
 

@@ -5,6 +5,7 @@ source "https://rubygems.org"
 gem 'puma'
 gem 'pg'
 gem 'rackup'
+gem 'sidekiq'
 gem 'sinatra'
 
 group :test do
