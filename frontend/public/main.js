@@ -36,7 +36,7 @@ function handleSubmit(event) {
 };
 
 function uploadCsv() {
-  const importUrl = 'http://localhost:3000/import';
+  const importPath = '/import';
   const formData = new FormData(importForm);
   
   const fetchOptions = {
@@ -44,7 +44,7 @@ function uploadCsv() {
     body: formData
   };
   
-  fetch(importUrl, fetchOptions);
+  fetch(importPath, fetchOptions);
 };
 
 function examHTML(exam) {

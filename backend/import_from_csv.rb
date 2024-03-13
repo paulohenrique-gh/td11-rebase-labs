@@ -1,3 +1,6 @@
 require_relative 'lib/helpers/csv_handler'
+require 'csv'
 
-CSVHandler.import('./data.csv')
+rows = CSV.read('./data.csv', col_sep: ';')
+
+CSVHandler.import(rows)

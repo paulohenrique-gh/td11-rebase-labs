@@ -1,6 +1,7 @@
 require 'sinatra'
 require 'rack/handler/puma'
 require 'faraday'
+require 'faraday/multipart'
 
 set :port, 4000
 
@@ -47,7 +48,15 @@ post '/import' do
     return { error: 'File type not supported.'}.to_json
   end
 
-  api_response = Faraday.get("#{BACKEND_API_URL}/import")
+  api_connection = Faraday.new(url: BACKEND_API_URL) do |faraday|
+    faraday.request :multipart
+    faraday.request :url_encoded
+    faraday.adapter Faraday.default_adapter
+  end
+
+  params = { file: Faraday::Multipart::FilePart.new(file, filetype) }
+
+  api_response = api_connection.post('/import', params)
 
   response.status = 500 unless api_response.success?
 

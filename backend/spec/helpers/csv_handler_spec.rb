@@ -19,9 +19,7 @@ RSpec.describe 'import_from_csv script' do
        'leucócitos', '9-61', '89']
     ]
 
-    allow(CSV).to receive(:read).and_return(fake_data)
-
-    CSVHandler.import('data.csv')
+    CSVHandler.import(fake_data)
 
     expect(LabExam.all.count).to eq 2
     expect(Test.all.count).to eq 2

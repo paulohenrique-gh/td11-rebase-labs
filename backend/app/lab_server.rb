@@ -31,6 +31,8 @@ post '/import' do
   content_type :json
   response.headers['Access-Control-Allow-Origin'] = '*'
 
+  puts "FILE BACKEND: #{params[:file]}"
+
   unless params[:file]
     response.status = 400
     return { error: 'The request does not contain any file.'}.to_json
@@ -44,9 +46,9 @@ post '/import' do
     return { error: 'File type is not CSV.' }.to_json
   end
 
-  copy_file_path = "/app/tmp/#{File.basename(file.path)}"
+  rows = CSV.read(file, col_sep: ';')
 
-  ImportCsvJob.perform_async(FileUtils.cp(file.path, copy_file_path))
+  ImportCsvJob.perform_async(rows)
   { message: 'Processing file.' }.to_json
 end
 

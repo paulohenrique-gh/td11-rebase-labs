@@ -6,6 +6,7 @@ gem 'puma'
 gem 'rackup'
 gem 'sinatra'
 gem 'faraday'
+gem 'faraday-multipart'
 
 group :test do
   gem 'rspec'
