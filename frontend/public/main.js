@@ -61,12 +61,14 @@ function uploadCsv() {
     if (response.status === 422) {
       flashMsg.classList.remove('hidden');
       message.textContent = 'Formato não compatível. Selecione um arquivo CSV.';
+      importForm.reset();
       return;
     }
 
     if (!response.ok) {
       flashMsg.classList.remove('hidden');
       message.textContent = 'Ocorreu um erro ao processar requisição. Tente mais tarde.';
+      importForm.reset();
       return;
     }
 
@@ -75,7 +77,7 @@ function uploadCsv() {
 
     currentContent.replaceWith(examList);
     currentContent = examList;
-
+    importForm.reset();
   }).
   then((data) => {
     console.log(data);
