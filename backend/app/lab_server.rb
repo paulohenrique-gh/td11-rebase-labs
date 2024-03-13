@@ -28,22 +28,22 @@ get '/tests/:token' do
 end
 
 post '/import' do
-  ImportCsvJob.perform_async
-  'done'
+  content_type :json
+  response.headers['Access-Control-Allow-Origin'] = '*'
 
-  # content_type :json
-  # response.headers['Access-Control-Allow-Origin'] = '*'
+  file = params[:file][:tempfile]
+  filetype = params[:file][:type]
 
-  # file = params[:file][:tempfile]
-  # filetype = params[:file][:type]
+  unless ALLOWED_FILE_TYPES.include? filetype
+    response.status = 422
+    return { error: 'File type is not CSV.' }.to_json
+  end
 
-  # unless ALLOWED_FILE_TYPES.include? filetype
-    # response.status = 422
-    # return { error: 'File type is not CSV.' }.to_json
-  # end
+  copy_file_path = "/app/tmp/#{File.basename(file.path)}"
+  FileUtils.cp(file.path, copy_file_path)
 
-  # CSVHandler.import(file)
-  # { message: 'Data imported successfully.' }.to_json
+  ImportCsvJob.perform_async(copy_file_path)
+  { message: 'Processing file.' }.to_json
 end
 
 if ENV['RACK_ENV'] == 'development' || ENV['RACK_ENV'] == 'production'

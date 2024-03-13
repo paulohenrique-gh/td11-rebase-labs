@@ -26,6 +26,16 @@ describe '/import' do
     expect(json_response['error']).to eq 'File type not supported.'
   end
 
+  it '500 if backend request is not successfull' do
+    fake_csv = 'spec/support/test.csv'
+    fake_response = double('Faraday::Response', status: 500, success?: false)
+    allow(Faraday).to receive(:get).and_return(fake_response)
+
+    post '/import', file: Rack::Test::UploadedFile.new(fake_csv, 'text/csv')
+
+    expect(last_response.status).to eq 500
+  end
+
   it 'returns error when no file is sent' do
     post '/import'
 
