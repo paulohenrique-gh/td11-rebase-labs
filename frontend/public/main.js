@@ -102,16 +102,25 @@ function formatDate(dateString) {
 };
 
 function examHTML(exam) {
-  let tests = '';
+  const patient = new Patient(
+    exam.patient.patient_cpf, exam.patient.patient_name, exam.patient.patient_email,
+    exam.patient.patient_birthdate, exam.patient.patient_address, exam.patient.patient_city,
+    exam.patient.patient_state
+  );
+
+  const doctor = new Doctor(
+    exam.doctor.doctor_crm, exam.doctor.doctor_crm_state,
+    exam.doctor.doctor_name, exam.doctor.doctor_email
+  );
+
+  const newExam = new Exam(
+    exam.exam_result_token, exam.exam_result_date, patient, doctor, tests
+  );
+
+  const tests = [];
 
   exam.tests.forEach((test) => {
-    tests += `
-      <li class="test-listing--item">
-        <span>${test.test_type}</span>
-        <span>${test.test_type_limits}</span>
-        <span>${test.test_type_results}</span>
-      </li>
-    `
+    tests.push(new ExamTest(test.test_type, test.test_type_limits, test.test_type_results));
   });
 
   return `<div class="exam-section">
