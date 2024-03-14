@@ -18,8 +18,6 @@ Aplicação para listagem de exames médicos. Parte do Rebase Labs na turma 11 d
 - rack-test
 - sidekiq
 
-A aplicação foi dividida em backend,
-
 ## Pré-requisitos
 
 É necessário ter o [Docker](https://www.docker.com/get-started/) instalado antes de realizar a configuração no próximo passo.
