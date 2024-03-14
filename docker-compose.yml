@@ -22,7 +22,9 @@ services:
       - REDIS_URL=redis://redis:6379/0
     ports:
       - "3000:3000"
-    command: bash -c "bundle install && ruby app/lab_server.rb -o 0.0.0.0"
+    command: >
+      bash -c "apt-get update -y && apt-get install -y chromium-driver && \
+      bundle install && ruby app/lab_server.rb -o 0.0.0.0"
   
   sidekiq:
     <<: *backend
