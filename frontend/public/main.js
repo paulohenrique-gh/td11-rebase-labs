@@ -57,7 +57,6 @@ function uploadCsv() {
 
   fetch(importPath, fetchOptions).
   then((response) => {
-
     if (response.status === 422) {
       flashMsg.classList.remove('hidden');
       message.textContent = 'Formato não compatível. Selecione um arquivo CSV.';
@@ -163,7 +162,6 @@ function loadExamList() {
   then((response) => response.json()).
   then((data) => {  
     if (data.length === 0) {
-      console.log('sem nada cadastrado')
       const li = document.createElement('li');
 
       li.innerHTML = 'Nenhum registro encontrado.';
