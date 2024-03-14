@@ -1,3 +1,8 @@
+import Patient from './patient.js';
+import Doctor from './doctor.js';
+import ExamTest from './examTest.js';
+import Exam from './exam.js';
+
 const path = '/load-exams'
 
 const flashMsg = document.querySelector('.flash-msg');
@@ -57,7 +62,6 @@ function uploadCsv() {
 
   fetch(importPath, fetchOptions).
   then((response) => {
-
     if (response.status === 422) {
       flashMsg.classList.remove('hidden');
       message.textContent = 'Formato não compatível. Selecione um arquivo CSV.';
@@ -163,7 +167,6 @@ function loadExamList() {
   then((response) => response.json()).
   then((data) => {  
     if (data.length === 0) {
-      console.log('sem nada cadastrado')
       const li = document.createElement('li');
 
       li.innerHTML = 'Nenhum registro encontrado.';
@@ -185,11 +188,11 @@ function loadExamList() {
 
     const li = document.createElement('li');
 
-      li.innerHTML = 'Não foi possível carregar as informações. Tente mais tarde.';
-      li.classList.add('no-results-msg');
-      examList.appendChild(li);
+    li.innerHTML = 'Não foi possível carregar as informações. Tente mais tarde.';
+    li.classList.add('no-results-msg');
+    examList.appendChild(li);
 
-      return;
+    return;
   });
 
   currentContent = examList;
@@ -257,9 +260,9 @@ searchForm.onsubmit = function(event) {
       filter.innerHTML = `${token}`;
     }).
     catch(error => {
-    console.log(error);
+      console.log(error);
 
-    const p = document.createElement('p');
+      const p = document.createElement('p');
 
       p.innerHTML = 'Não foi possível carregar as informações. Tente mais tarde.';
       p.classList.add('no-results-msg');

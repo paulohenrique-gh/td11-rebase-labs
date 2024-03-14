@@ -10,7 +10,9 @@ set :port, 3000
 ALLOWED_FILE_TYPES = ['text/csv', 'application/vnd.ms-excel'].freeze
 
 get '/' do
-  'Hello World'
+  content = "<strong>Endpoints</strong><br>"
+  content << "- /tests<br>"
+  content << "- /tests/:token"
 end
 
 get '/tests' do
