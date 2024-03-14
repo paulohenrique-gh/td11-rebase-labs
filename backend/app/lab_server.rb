@@ -9,10 +9,6 @@ set :port, 3000
 
 ALLOWED_FILE_TYPES = ['text/csv', 'application/vnd.ms-excel'].freeze
 
-get '/' do
-  'Hello World'
-end
-
 get '/tests' do
   content_type :json
   response.headers['Access-Control-Allow-Origin'] = '*'
