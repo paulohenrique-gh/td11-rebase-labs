@@ -79,10 +79,22 @@ function uploadCsv() {
     currentContent = examList;
     importForm.reset();
   }).
-  then((data) => {
-    console.log(data);
+  catch((error) => {
+    console.log(error);
+
+    flashMsg.classList.remove('hidden');
+    message.innerHTML = 'Ocorreu um erro ao inesperado. Tente mais tarde.';
+    importForm.reset();
   });
 
+};
+
+function formatDate(dateString) {
+  if (dateString === '') return;
+
+  const [year, month, day] = dateString.split('-');
+
+  return `${day}/${month}/${year}`;
 };
 
 function examHTML(exam) {
@@ -101,7 +113,7 @@ function examHTML(exam) {
   return `<div class="exam-section">
             <div class="general-data">
               <div><strong>Token:</strong> ${exam.exam_result_token}</div>
-              <div><strong>Data do resultado:</strong> ${exam.exam_result_date}</div>
+              <div><strong>Data do resultado:</strong> ${formatDate(exam.exam_result_date)}</div>
             </div>
             <div class="patient-data">
               <div class="patient-data--header">
@@ -111,7 +123,7 @@ function examHTML(exam) {
               <div class="patient-data--info">
                 <div><strong>CPF:</strong> ${exam.patient.patient_cpf}</div>
                 <div><strong>E-mail:</strong> ${exam.patient.patient_email}</div>
-                <div><strong>Data de nascimento:</strong> ${exam.patient.patient_birthdate}</div>
+                <div><strong>Data de nascimento:</strong> ${formatDate(exam.patient.patient_birthdate)}</div>
                 <div><strong>Endereço:</strong> ${exam.patient.patient_address}</div>
                 <div><strong>Cidade:</strong> ${exam.patient.patient_city}</div>
                 <div><strong>Estado:</strong> ${exam.patient.patient_state}</div>
