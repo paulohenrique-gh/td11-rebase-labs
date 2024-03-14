@@ -67,6 +67,20 @@ Foram criadas 4 tabelas a partir dos dados brutos do CSV.
 
 [![labs-database.png](https://i.postimg.cc/0yrCqCMH/labs-database.png)](https://postimg.cc/VJQtqnFj)
 
+### Reiniciando o banco de dados
+
+Para deletar todos os registros no banco de dados, execute os comandos:
+```shell
+docker compose down -v
+```
+```shell
+sudo rm -rf backend/db
+```
+Para reiniciar a aplicação:
+```shell
+docker compose up
+```
+
 ## Backend
 
 ### Endpoints
