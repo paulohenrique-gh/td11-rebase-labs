@@ -302,3 +302,12 @@ Para encerrar a aplicação e remover os volumes associados aos containers, exec
 ```shell
 docker compose down -v
 ```
+
+## Ideias de melhorias futuras
+- Validação no CSV para verificar os cabeçalhos e as informações no arquivo antes de enfileirar o job para importação para o banco de dados
+- Configuração do Capybara para implementação de testes de sistema no frontend
+- Refatoração do JavaScript para deixar o código mais modular
+- Revisão no código Ruby para deixar algumas partes do código com uma legibilidade melhor, e separar responsabilidade de alguns métodos
+- Melhorar desempenho na importação de dados do CSV
+- Revisar os testes para remover redundância e incluir validações que ainda faltam
+- Implementar paginação na lista de exames
