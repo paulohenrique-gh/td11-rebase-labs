@@ -4,7 +4,7 @@
 
 Aplicação para listagem de exames médicos. Parte do Rebase Labs na turma 11 do TreinaDev.
 
-**Linguagem de programação**: Ruby
+**Linguagens utilizadas**: Ruby, JavaScript, HTML, CSS
 
 **Banco de dados**: Postgres
 
