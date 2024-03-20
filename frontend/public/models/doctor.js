@@ -5,6 +5,10 @@ class Doctor {
     this.name = name;
     this.email = email;
   }
+
+  toString() {
+    return JSON.stringify(this, null, 4);
+  }
 };
 
 export default Doctor;

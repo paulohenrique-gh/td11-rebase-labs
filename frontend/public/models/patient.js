@@ -8,6 +8,10 @@ class Patient {
     this.city = city;
     this.state = state;
   }
+
+  toString() {
+    return JSON.stringify(this, null, 4);
+  }
 }
 
   export default Patient;
