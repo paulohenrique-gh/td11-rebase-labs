@@ -26,4 +26,27 @@ RSpec.describe 'import_from_csv script' do
     expect(Doctor.all.count).to eq 2
     expect(Patient.all.count).to eq 1
   end
+
+  it 'raises error if csv has invalid header' do
+    invalid_csv_header = ['cpf, data nascimento']
+    valid_patient_data = ['048.445.170-88', 'Renato Barbosa', 'renato.barbosa@ebert-quigley.com',
+                          '1999-03-19', '192 Rua Pedras', 'Ituverava', 'Alagoas', 'B000BJ20J4',
+                          'PI', 'Célia Ferreira', 'Célia@wisozk.biz', 'IQCZ17', '2023-08-08',
+                          'hemácias', '45-52', '97']
+    csv_rows = [invalid_csv_header, valid_patient_data]
+
+    expect { CSVHandler.import(csv_rows) }.to raise_error(CSVHandler::ImportError, 'CSV com colunas inválidas')
+  end
+
+  it 'raises error if csv has missing data' do
+    valid_csv_header = ['cpf', 'nome paciente', 'email paciente', 'data nascimento paciente',
+                        'endereço/rua paciente', 'cidade paciente', 'estado patiente',
+                        'crm médico', 'crm médico estado', 'nome médico', 'email médico',
+                        'token resultado exame', 'data exame', 'tipo exame', 'limites tipo exame',
+                        'resultado tipo exame']
+    invalid_patient_data = ['', 'Renato Barbosa', '2023-03-04', 'Alagoas']
+    csv_rows = [valid_csv_header, invalid_patient_data]
+
+    expect { CSVHandler.import(csv_rows) }.to raise_error(CSVHandler::ImportError, 'CSV com dados incompletos') 
+  end
 end
