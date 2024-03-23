@@ -1,5 +1,27 @@
 # Rebase Labs
 
+## Informações gerais
+
+Aplicação para listagem de exames médicos. Parte do Rebase Labs na turma 11 do TreinaDev.
+
+**Linguagens utilizadas**: Ruby, JavaScript, HTML, CSS
+
+**Banco de dados**: Postgres
+
+**Gems**:
+- puma
+- rackup
+- sinatra
+- faraday
+- faraday-multipart
+- rspec
+- rack-test
+- sidekiq
+
+## Pré-requisitos
+
+É necessário ter o [Docker](https://www.docker.com/get-started/) instalado antes de realizar a configuração no próximo passo.
+
 ## Configuração
 
 Execute os comandos abaixo para clonar o repositório e entrar no diretório da aplicação:
@@ -16,18 +38,20 @@ Com o Docker instalado, execute o comando abaixo para subir as aplicações:
 ```bash
 docker compose up
 ```
-API: http://localhost:3000
+URL base da API: http://localhost:3000
 
 Frontend: http://localhost:4000
 
 ## Testes
 
-Utilizar o comando abaixo para executar a suite de testes:
+Utilizar o comando abaixo para executar a suite de testes do backend:
 ```bash
 docker exec labs-backend rspec
 ```
 
 ## Importar dados do CSV para o banco de dados
+
+Aplicação inicia sem dados cadastrados.
 
 Para importar manualmente os dados do arquivo `data.csv` para o banco de dados, execute:
 ```bash
@@ -36,8 +60,26 @@ docker exec labs-backend bash -c "ruby import_from_csv.rb"
 
 ## Banco de dados
 
+Foram criados dois bancos de dados, um para desenvolvimento e outro para testes. A aplicação no backend foi configurada de forma que a cada teste os dados do banco de testes sejam excluídos.
+
 Foram criadas 4 tabelas a partir dos dados brutos do CSV.
 [Aqui](https://dbdiagram.io/d/65e7c7eccd45b569fb9edec6) tem o diagrama com as tabelas e as relações.
+
+[![labs-database.png](https://i.postimg.cc/0yrCqCMH/labs-database.png)](https://postimg.cc/VJQtqnFj)
+
+### Reiniciando o banco de dados
+
+Para deletar todos os registros no banco de dados, execute os comandos:
+```shell
+docker compose down -v
+```
+```shell
+sudo rm -rf backend/db
+```
+Para reiniciar a aplicação:
+```shell
+docker compose up
+```
 
 ## Backend
 
@@ -52,6 +94,7 @@ Exemplo de requisição:
 ```bash
 GET /tests
 ```
+---
 
 Exemplo de resposta:
 
@@ -131,6 +174,7 @@ Exemplo de resposta:
   }
 ]
 ```
+
 ### `/tests/:token`
 
 Retorna um objeto JSON de acordo com token passado
@@ -140,6 +184,8 @@ Exemplo de requisição
 ```bash
 GET /tests/TJUXC2
 ```
+---
+
 Exemplo de resposta
 
 ```json
@@ -175,7 +221,93 @@ Exemplo de resposta
   ]
 }
 ```
+
+### `/import`
+
+Permite o envio de um arquivo .csv para importação para o banco de dados
+
+Exemplo de requisição:
+
+```shell
+curl -X POST -H "Content-Type: multipart/form-data" \
+     -F "file=@data.csv;type=text/csv" \
+     http://localhost:3000/import
+```
+---
+
+Exemplo de resposta quando não é enviado arquivo na requisição:
+
+```json
+{ "error": "The request does not contain any file."}
+```
+---
+
+Exemplo de resposta quando formato do arquivo não é suportado:
+
+```json
+{ "error": "File type is not CSV." }
+```
+---
+
+Exemplo de requisição em cenário de sucesso:
+
+```json
+{ "message": "Processing file." }
+```
+
 ## Frontend
 
-TODO
+### Funcionalidades
 
+No frontend, é possível importar dados de um arquivo CSV. A importação é feita de forma assíncrona e o usuário pode continuar usando a aplicação. 
+
+[![labs-upload.png](https://i.postimg.cc/J4Z4TsQD/labs-upload.png)](https://postimg.cc/PPfjJr9T)
+---
+
+As requisições no frontend não vão diretamente para o backend. Elas passam primeiro por rotas implementadas no front, que então direcionam para o backend.
+Por exemplo, para importar um arquivo, a requisição vai para uma rota no frontend que valida o formato do arquivo antes de fazer a requisição para o backend, e renderiza uma mensagem de erro.
+Isso permitiu também praticar um conceito passado na Vivência em Time, que orienta a não expor o endpoint da API externa nas ferramentas de desenvolvedor do navegador do cliente.
+
+[![labs-formato-errado.png](https://i.postimg.cc/mrxNFXSz/labs-formato-errado.png)](https://postimg.cc/K1Ng65wx)
+---
+
+Ao enviar um arquivo válido, o usuário tem um feedback informando que o arquivo está em processamento.
+
+[![labs-import.png](https://i.postimg.cc/43PzYJ2y/labs-import.png)](https://postimg.cc/VSSSTc8P)
+---
+
+Após a importação ser executada em background, as informações ficam disponíveis no frontend quando o usuário recarrega a página. 
+
+[![labs-list.png](https://i.postimg.cc/B6MG6wKH/labs-list.png)](https://postimg.cc/fttPqC5R)
+---
+
+O usuário também pode informar um token na barra de pesquisa. Caso exista um exame com um token informado, é exibido na página apenas o exame correspondente.
+
+[![labs-detail.png](https://i.postimg.cc/9MtNF4sk/labs-detail.png)](https://postimg.cc/9R0BLfmP)
+
+
+### Testes
+
+Foram escritos testes de requisição para as rotas internas do frontend.
+
+Para executar os testes, excute o comando abaixo:
+```shell
+docker exec -it labs-frontend rspec
+```
+
+## Fechando a aplicação
+
+Para encerrar a aplicação e remover os volumes associados aos containers, execute o comando abaixo:
+
+```shell
+docker compose down -v
+```
+
+## Ideias de melhorias futuras
+- Validação no CSV para verificar os cabeçalhos e as informações no arquivo antes de enfileirar o job para importação para o banco de dados
+- Configuração do Capybara para implementação de testes de sistema no frontend
+- Refatoração do JavaScript para deixar o código mais modular
+- Revisão no código Ruby para deixar algumas partes do código com uma legibilidade melhor, e separar responsabilidade de alguns métodos
+- Melhorar desempenho na importação de dados do CSV
+- Revisar os testes para remover redundância e incluir validações que ainda faltam
+- Implementar paginação na lista de exames
