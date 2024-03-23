@@ -175,7 +175,7 @@ importForm.setAttribute('class', 'import-form');
 importForm.setAttribute('method', 'post');
 importForm.setAttribute('enctype', 'multipart/form-data');
 importForm.innerHTML = `
-    < div class= "import-form-group" >
+    <div class= "import-form-group">
     <label for="file">Selecione o CSV</label>
     <input name="file" id="file" type="file" accept="text/csv, application/vnd.ms-excel" required>
   </div>
