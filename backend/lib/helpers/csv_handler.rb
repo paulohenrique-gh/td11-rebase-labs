@@ -62,7 +62,6 @@ class CSVHandler
       "token resultado exame", "data exame", "tipo exame", "limites tipo exame", "resultado tipo exame"
     ]
 
-    return false unless rows.first == valid_csv_header
-    true
+    rows.first == valid_csv_header
   end
 end
