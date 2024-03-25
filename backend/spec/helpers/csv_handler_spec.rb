@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'helpers/csv_handler'
 
 RSpec.describe 'import_from_csv script' do
-  it 'imports data from csv do database as expected' do
+  it 'imports data from csv to database as expected' do
     fake_data = [
       ['cpf', 'nome paciente', 'email paciente', 'data nascimento paciente',
        'endereço/rua paciente', 'cidade paciente', 'estado patiente',

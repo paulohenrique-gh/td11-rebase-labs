@@ -36,6 +36,11 @@ GEM
     rspec-mocks (3.13.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
+    rspec-sidekiq (4.1.0)
+      rspec-core (~> 3.0)
+      rspec-expectations (~> 3.0)
+      rspec-mocks (~> 3.0)
+      sidekiq (>= 5, < 8)
     rspec-support (3.13.1)
     ruby2_keywords (0.0.5)
     sidekiq (7.2.2)
@@ -62,6 +67,7 @@ DEPENDENCIES
   rack-test
   rackup
   rspec
+  rspec-sidekiq
   sidekiq
   sinatra
 
