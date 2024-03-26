@@ -23,44 +23,68 @@ describe "GET '/tests'" do
     load 'import_from_csv.rb'
     get '/tests'
 
+    first_exam = {
+      exam_result_token: 'IQCZ17',
+      exam_result_date: '2023-08-08',
+      patient: {
+        patient_cpf: '048.445.170-88',
+        patient_name: 'Renato Barbosa',
+        patient_email: 'renato.barbosa@ebert-quigley.com',
+        patient_birthdate: '1999-03-19',
+        patient_address: '192 Rua Pedras',
+        patient_city: 'Ituverava',
+        patient_state: 'Alagoas'
+      },
+      doctor: {
+        doctor_crm: 'B000BJ20J4',
+        doctor_crm_state: 'PI',
+        doctor_name: 'Célia Ferreira',
+        doctor_email: 'Célia@wisozk.biz',
+      },
+      tests: [
+        {
+          test_type: 'hemácias',
+          test_type_limits: '45-52',
+          test_type_results: '97'
+        }
+      ]
+    }
+
+    second_exam = {
+      exam_result_token: 'IQCZ99',
+      exam_result_date: '2021-08-05',
+      patient: {
+        patient_cpf: '048.973.170-88',
+        patient_name: 'Emilly Batista Neto',
+        patient_email: 'gerald.crona@ebert-quigley.com',
+        patient_birthdate: '2001-03-11',
+        patient_address: '165 Rua Rafaela',
+        patient_city: 'Ituverava',
+        patient_state: 'Alagoas'
+      },
+      doctor: {
+        doctor_crm: 'B0009A20A5',
+        doctor_crm_state: 'PI',
+        doctor_name: 'Maria Luiza Pires',
+        doctor_email: 'denna@wisozk.biz',
+      },
+      tests: [
+        {
+          test_type: 'leucócitos',
+          test_type_limits: '9-61',
+          test_type_results: '89'
+        }
+      ]
+    }
+    
+    expected_response = [first_exam, second_exam]
+
     expect(last_response.status).to eq 200
     expect(last_response.content_type).to include 'application/json'
     json_response = JSON.parse(last_response.body, symbolize_names: true)
     expect(json_response.class).to eq Array
     expect(json_response.size).to eq 2
-    expect(json_response.first[:exam_result_token]).to eq 'IQCZ17'
-    expect(json_response.first[:exam_result_date]).to eq '2023-08-08'
-    expect(json_response.first[:patient][:patient_cpf]).to eq '048.445.170-88'
-    expect(json_response.first[:patient][:patient_name]).to eq 'Renato Barbosa'
-    expect(json_response.first[:patient][:patient_email]).to eq 'renato.barbosa@ebert-quigley.com'
-    expect(json_response.first[:patient][:patient_birthdate]).to eq '1999-03-19'
-    expect(json_response.first[:patient][:patient_address]).to eq '192 Rua Pedras'
-    expect(json_response.first[:patient][:patient_city]).to eq 'Ituverava'
-    expect(json_response.first[:patient][:patient_state]).to eq 'Alagoas'
-    expect(json_response.first[:doctor][:doctor_crm]).to eq 'B000BJ20J4'
-    expect(json_response.first[:doctor][:doctor_crm_state]).to eq 'PI'
-    expect(json_response.first[:doctor][:doctor_name]).to eq 'Célia Ferreira'
-    expect(json_response.first[:doctor][:doctor_email]).to eq 'Célia@wisozk.biz'
-    expect(json_response.first[:tests].first[:test_type]).to eq 'hemácias'
-    expect(json_response.first[:tests].first[:test_type_limits]).to eq '45-52'
-    expect(json_response.first[:tests].first[:test_type_results]).to eq '97'
-
-    expect(json_response.last[:exam_result_token]).to eq 'IQCZ99'
-    expect(json_response.last[:exam_result_date]).to eq '2021-08-05'
-    expect(json_response.last[:patient][:patient_cpf]).to eq '048.973.170-88'
-    expect(json_response.last[:patient][:patient_name]).to eq 'Emilly Batista Neto'
-    expect(json_response.last[:patient][:patient_email]).to eq 'gerald.crona@ebert-quigley.com'
-    expect(json_response.last[:patient][:patient_birthdate]).to eq '2001-03-11'
-    expect(json_response.last[:patient][:patient_address]).to eq '165 Rua Rafaela'
-    expect(json_response.last[:patient][:patient_city]).to eq 'Ituverava'
-    expect(json_response.last[:patient][:patient_state]).to eq 'Alagoas'
-    expect(json_response.last[:doctor][:doctor_crm]).to eq 'B0009A20A5'
-    expect(json_response.last[:doctor][:doctor_crm_state]).to eq 'PI'
-    expect(json_response.last[:doctor][:doctor_name]).to eq 'Maria Luiza Pires'
-    expect(json_response.last[:doctor][:doctor_email]).to eq 'denna@wisozk.biz'
-    expect(json_response.last[:tests].first[:test_type]).to eq 'leucócitos'
-    expect(json_response.last[:tests].first[:test_type_limits]).to eq '9-61'
-    expect(json_response.last[:tests].first[:test_type_results]).to eq '89'
+    expect(json_response).to eq expected_response
   end
 
   it 'returns empty array before importing from CSV' do
